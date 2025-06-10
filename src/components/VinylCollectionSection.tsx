@@ -21,11 +21,7 @@ export default function VinylCollectionSection() {
   })
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
-  const stackY = useTransform(scrollYProgress, [0, 1], ['0%', '-20%'])
   
-  const rotateSectionX = useTransform(springY, [-100, 100], [-5, 5]) 
-  const rotateSectionY = useTransform(springX, [-100, 100], [5, -5]) 
-
   const vinylCovers = [
     { src: '/assets/images/IMG_1954.avif', alt: 'Vinyl Cover 1', delay: 0.05 },
     { src: '/assets/images/IMG_1955.avif', alt: 'Vinyl Cover 2', delay: 0.10 },
@@ -171,45 +167,23 @@ export default function VinylCollectionSection() {
           // y: springY   <-- DIESE ZEILE ENTFERNT
         }}
       >
-        <motion.h2 
-          animate={isVisible ? {
-            textShadow: [
-              '0 0 0 transparent',
-              '2px 2px 0 rgba(255, 255, 255, 0.1), -2px -2px 0 rgba(255, 255, 255, 0.1)',
-              '0 0 0 transparent',
-              '-2px 2px 0 rgba(255, 255, 255, 0.1), 2px -2px 0 rgba(255, 255, 255, 0.1)',
-              '0 0 0 transparent'
-            ]
-          } : {}}
-          transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-          style={{
-            fontSize: 'clamp(3rem, 10vw, 6rem)',
-            fontWeight: 900,
-            color: '#FFFFFF',
-            marginBottom: '1rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-            filter: 'contrast(1)'
-          }}
-        >
-          <span style={{ display: 'block' }}>Vinyl</span>
-          <motion.span 
-            style={{ 
-              display: 'block',
-              background: 'linear-gradient(45deg, #a0a0a0, #ffffff, #a0a0a0)',
-              backgroundSize: '200% 200%',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-            }}
-            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-          >
-            Cosmos
-          </motion.span>
-        </motion.h2>
+        <motion.div
+  className="section-header"
+  initial={{ opacity: 0, y: -50 }}
+  animate={isVisible ? { opacity: 1, y: 0 } : {}}
+  transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+  style={{ zIndex: 10 }}
+>
+  {/* Diese h2 benutzt jetzt die globalen CSS-Klassen */}
+  <h2 className="section-title">
+    <span className="title-line">
+      Vinyl Cosmos
+    </span>
+  </h2>
+  
+  {/* Dieser Unterstrich benutzt jetzt auch die globalen CSS-Klassen */}
+  <div className="title-underline"></div>
+</motion.div>
         
         {/* Pulsierender Unterstrich */}
         <motion.div 
