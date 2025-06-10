@@ -9,6 +9,9 @@ import VideoSection from '@/components/VideoSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 import ScrollBackground from '@/components/ScrollBackground'
+import VinylCollectionSection from '@/components/VinylCollectionSection'
+
+
 
 export default function Home() {
   return (
@@ -17,6 +20,7 @@ export default function Home() {
       <main className="relative">
         <LandingSection />
         <BiographySection />
+        <VinylCollectionSection/>
         <MusicSection />
         <StatsSection />
         <LabelsSection />
