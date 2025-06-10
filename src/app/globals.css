@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800&display=swap');
+
 /* ===== RESET & BASE ===== */
 * {
   margin: 0;
@@ -246,21 +248,46 @@ body {
   }
 }
 
-/* ===== PAGE SECTIONS ===== */
+/* ===== PAGE SECTIONS (COSMIC STYLE) ===== */
 .page-section {
-  min-height: 110vh; /* Slightly increased for more space but not too much */
-  padding: 3rem 2rem; /* Moderate padding for spacing */
+  min-height: 110vh;
+  padding: 3rem 2rem;
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  background: #000000; /* Stellt sicher, dass alle Sektionen schwarz sind */
   position: relative;
   overflow: hidden;
-  background-color: transparent;
-  border: none;
 }
+
+/* Cosmic Particles für ALLE Sections */
+.page-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 30% 70%, rgba(147, 51, 234, 0.2), transparent),
+    radial-gradient(1px 1px at 60% 40%, rgba(59, 130, 246, 0.2), transparent),
+    radial-gradient(1px 1px at 80% 90%, rgba(236, 72, 153, 0.2), transparent);
+  background-size: 300px 300px;
+  animation: driftStars 120s linear infinite;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0; /* Sicherstellen, dass es im Hintergrund ist */
+}
+
+@keyframes driftStars {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-150px, -150px); }
+}
+
 
 /* Special override for hero section to keep it full screen */
 #hero.page-section {
@@ -349,41 +376,83 @@ body {
   }
 }
 
-/* ===== SECTION HEADERS ===== */
+/* ===== SECTION HEADERS (COSMIC STYLE) - KORRIGIERTE VERSION ===== */
 .section-header {
   margin-bottom: 3.5rem;
   position: relative;
-  z-index: 2;
+  z-index: 2; /* Header über Partikel legen */
 }
 
+/* Der Container für die Schriftart und Größe */
 .section-title {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Orbitron', 'Bebas Neue', sans-serif !important;
   font-size: clamp(2.2rem, 5.5vw, 3.8rem);
   font-weight: 800;
+  letter-spacing: 0.2em !important;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   line-height: 1;
   margin-bottom: 0.8rem;
   position: relative;
+  /* HINWEIS: Farbverlauf und Text-Effekte wurden von hier entfernt */
 }
 
+@keyframes cosmicShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Das Element, das den Text enthält, bekommt jetzt den Stil */
 .title-line {
   display: block;
-  opacity: 0;
-  transform: translateY(50px) rotateX(45deg);
+  /* Die alten Animations-Eigenschaften wurden entfernt (opacity und transform) */
+  
+  /* Hier sind die neuen Farbverlauf- und Text-Effekte */
+  background: linear-gradient(
+    135deg, 
+    #ffffff 0%, 
+    rgba(147, 51, 234, 0.8) 50%, 
+    #ffffff 100%
+  );
+  background-size: 200% 200%;
+  animation: cosmicShift 6s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(147, 51, 234, 0.5));
   will-change: transform, opacity;
 }
 
 .title-underline {
   width: 50%;
-  height: 3px;
-  background: linear-gradient(90deg, #ff4757, #40e0d0) !important; /* About Me Farben für alle */
-  margin: 0;
-  margin-left: 0; /* Startet beim ersten Buchstaben links */
-  opacity: 0;
-  transform: scaleX(0);
-  transform-origin: left; /* Animation startet von links */
+  height: 2px !important;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(147, 51, 234, 0.8) 20%,
+    rgba(255, 255, 255, 1) 50%, 
+    rgba(59, 130, 246, 0.8) 80%,
+    transparent 100%
+  ) !important;
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.6);
+  margin: 0 auto;
+  animation: energyPulse 3s ease-in-out infinite;
+  transform-origin: center;
   will-change: transform, opacity;
+}
+
+@keyframes energyPulse {
+  0%, 100% { 
+    transform: scaleX(0.5); 
+    opacity: 0.5;
+  }
+  50% { 
+    transform: scaleX(1.2); 
+    opacity: 1;
+  }
+}
+
+/* Diese alte Animations-Regel ist nicht mehr nötig und sollte entfernt werden, falls noch vorhanden */
+.page-section.is-visible .title-line {
+  animation: none;
 }
 
 /* ===== ABOUT SECTION (#ueber-mich) ===== */
@@ -529,9 +598,12 @@ body {
   animation-delay: 0.15s;
 }
 
+/* Deaktiviert, da .title-underline jetzt seine eigene Animation hat */
+/*
 .page-section.is-visible .title-underline {
   animation: underlineExpand 0.7s ease-out 0.4s forwards;
 }
+*/
 
 #ueber-mich.is-visible .bio-image {
   animation: imageReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
@@ -644,12 +716,15 @@ body {
   z-index: 1;
 }
 
+/* Diese Regel wird durch den neuen Cosmic Style für .section-title überschrieben */
+/*
 .new-style-section.section-is-white .section-title,
 .new-style-section.section-is-white .section-header .title-line,
 .section-title,
 .title-line {
-  color: #ffffff !important; /* Alle Titel weiß */
+  color: #ffffff !important; 
 }
+*/
 
 .stat-number {
   color: #ffffff !important; /* Stats Zahlen weiß */
@@ -664,178 +739,390 @@ body {
 }
 
 /* ===== MUSIC SECTION ===== */
-#meine-musik .section-header .section-title {
-  color: #ffffff !important;
+#my-music {
+  position: relative;
+  overflow: hidden;
+  background: #000;
 }
 
-/* Professional Sound Wave Background */
-.music-bg-subtle {
+/* Übergang von oben - Nebel der in die Galaxy übergeht */
+#my-music::before {
+  content: '';
   position: absolute;
-  top: 0;
+  top: -100px;
   left: 0;
   width: 100%;
-  height: 100%;
-  pointer-events: none;
+  height: 200px;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(147, 51, 234, 0.05) 20%,
+    rgba(59, 130, 246, 0.03) 40%,
+    transparent 100%
+  );
+  filter: blur(80px);
   z-index: 1;
-  overflow: hidden;
+  pointer-events: none;
 }
 
-.sound-wave {
+/* Übergang nach unten - Aurora-ähnlicher Effekt */
+#my-music::after {
+  content: '';
   position: absolute;
+  bottom: -50px;
+  left: 0;
   width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: soundWave 8s ease-in-out infinite;
+  height: 150px;
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(147, 51, 234, 0.2) 40%,
+    rgba(34, 211, 238, 0.1) 70%,
+    transparent 100%
+  );
+  filter: blur(40px);
+  z-index: 100;
+  pointer-events: none;
+  animation: auroraWave 8s ease-in-out infinite;
 }
 
-.wave-1 {
-  top: 20%;
-  animation-delay: 0s;
-  background: linear-gradient(90deg, transparent, rgba(58, 86, 104, 0.3), transparent);
-}
-
-.wave-2 {
-  top: 50%;
-  animation-delay: -2s;
-  background: linear-gradient(90deg, transparent, rgba(58, 86, 104, 0.2), transparent);
-}
-
-.wave-3 {
-  top: 80%;
-  animation-delay: -4s;
-  background: linear-gradient(90deg, transparent, rgba(58, 86, 104, 0.1), transparent);
-}
-
-@keyframes soundWave {
-  0%, 100% {
-    transform: scaleX(0);
-    opacity: 0;
+@keyframes auroraWave {
+  0%, 100% { 
+    transform: translateY(0) scaleY(1);
+    opacity: 0.8;
   }
-  50% {
-    transform: scaleX(1);
+  50% { 
+    transform: translateY(-20px) scaleY(1.2);
     opacity: 1;
   }
 }
 
+/* Zusätzliche Lichtstreifen am oberen Rand */
+.cosmic-transition-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background: 
+    radial-gradient(ellipse at 20% 0%, rgba(147, 51, 234, 0.3) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 0%, rgba(59, 130, 246, 0.2) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 0%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+  opacity: 0.6;
+  z-index: 2;
+  pointer-events: none;
+  animation: topGlow 15s ease-in-out infinite;
+}
 
-/* Spotify Players Container */
+@keyframes topGlow {
+  0%, 100% { opacity: 0.6; transform: translateY(0); }
+  50% { opacity: 0.8; transform: translateY(10px); }
+}
+
+/* Lichtstreifen am unteren Rand */
+.cosmic-transition-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 1) 0%,
+    transparent 50%
+  );
+  z-index: 99;
+  pointer-events: none;
+}
+
+/* Floating Particles für Übergang */
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(100px) scale(1);
+    opacity: 0;
+  }
+}
+
+.cosmic-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  filter: blur(1px);
+  animation: floatUp 20s linear infinite;
+  z-index: 3;
+}
+
+.cosmic-particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
+.cosmic-particle:nth-child(2) { left: 25%; animation-delay: 3s; animation-duration: 22s; }
+.cosmic-particle:nth-child(3) { left: 40%; animation-delay: 6s; animation-duration: 20s; }
+.cosmic-particle:nth-child(4) { left: 55%; animation-delay: 9s; animation-duration: 24s; }
+.cosmic-particle:nth-child(5) { left: 70%; animation-delay: 12s; animation-duration: 19s; }
+.cosmic-particle:nth-child(6) { left: 85%; animation-delay: 15s; animation-duration: 21s; }
+
+#my-music .section-header .section-title {
+  color: #ffffff !important;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  position: relative;
+  z-index: 10;
+  /* Überschreibt den Cosmic Style nur für diese Sektion */
+  background: linear-gradient(135deg, #f0f0f0, #cfcfcf) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
+  animation: none !important;
+}
+
+/* Cosmic Background */
 .spotify-players-container {
   position: relative;
   width: 100%;
-  max-width: 1200px;
-  height: 70vh;
-  margin: 3rem auto;
-  padding: 2rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 3rem;
-  align-items: center;
-  justify-items: center;
-  border: 2px solid #555; /* Debug border */
-  min-height: 400px;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: visible; /* WICHTIG: Player können sichtbar bleiben */
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 50%, #000000 100%);
 }
 
-.spotify-player {
+/* Container mit mehr Padding unten */
+#my-music {
   position: relative;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
   overflow: hidden;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  opacity: 1;
-  transform: scale(1) translateY(0);
-  will-change: transform, opacity;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  background: #333;
+  background: #000;
+  padding-bottom: 200px; /* Extra Platz nach unten */
+  margin-bottom: -100px; /* Überlappung mit nächster Section */
 }
 
-.spotify-player:hover {
-  transform: scale(1.05) translateY(-10px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-}
-
-.spotify-player.is-playing {
-  animation: playerPulse 2s ease-in-out infinite;
-}
-
-@keyframes playerPulse {
-  0%, 100% {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  }
-  50% {
-    box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4), 0 0 50px rgba(255, 71, 87, 0.2);
-  }
-}
-
-/* Wave Impulses */
-.wave-impulses {
+/* Sterne Hintergrund */
+.spotify-players-container::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 30% 80%, white, transparent);
+  background-size: 200px 200px;
+  background-position: 0 0, 40px 60px, 130px 270px, 70px 100px, 150px 50px, 100px 150px;
+  animation: starsMove 200s linear infinite;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+/* Nebel Effekt */
+.spotify-players-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(ellipse at center, transparent 0%, rgba(147, 51, 234, 0.1) 40%, transparent 70%),
+    radial-gradient(ellipse at 20% 80%, transparent 0%, rgba(59, 130, 246, 0.1) 40%, transparent 70%),
+    radial-gradient(ellipse at 80% 20%, transparent 0%, rgba(236, 72, 153, 0.1) 40%, transparent 70%),
+    radial-gradient(ellipse at 40% 40%, transparent 0%, rgba(34, 211, 238, 0.1) 40%, transparent 70%);
+  animation: nebulaRotate 60s ease-in-out infinite;
+  filter: blur(40px);
+  z-index: 2;
+}
+
+@keyframes starsMove {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-100px, -100px); }
+}
+
+@keyframes nebulaRotate {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.1); }
+  50% { transform: rotate(180deg) scale(1); }
+  75% { transform: rotate(270deg) scale(0.9); }
+}
+
+/* Spotify Player Positioning */
+.spotify-player {
+  position: absolute !important;
   z-index: 10;
 }
 
-.wave-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 3px solid #ff4757;
+/* Zentraler Player (Sonne) */
+.spotify-player:nth-child(1) {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 20;
+}
+
+.spotify-player:nth-child(1) .player-disc {
+  width: 200px;
+  height: 200px;
+  box-shadow: 
+    0 0 60px rgba(255, 215, 0, 0.6),
+    0 0 120px rgba(255, 165, 0, 0.4),
+    0 0 180px rgba(255, 69, 0, 0.2),
+    inset 0 0 60px rgba(255, 215, 0, 0.3);
+  animation: sunPulse 4s ease-in-out infinite;
+}
+
+@keyframes sunPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 
+      0 0 60px rgba(255, 215, 0, 0.6),
+      0 0 120px rgba(255, 165, 0, 0.4),
+      0 0 180px rgba(255, 69, 0, 0.2),
+      inset 0 0 60px rgba(255, 215, 0, 0.3);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 
+      0 0 80px rgba(255, 215, 0, 0.8),
+      0 0 160px rgba(255, 165, 0, 0.6),
+      0 0 240px rgba(255, 69, 0, 0.3),
+      inset 0 0 80px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* Orbiting Players - mit unterschiedlichen Startpositionen */
+.spotify-player:nth-child(2) {
+  top: 50% !important;
+  left: 50% !important;
+  animation: orbit1 20s linear infinite;
+}
+
+@keyframes orbit1 {
+  from { transform: rotate(0deg) translateX(200px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
+}
+
+.spotify-player:nth-child(3) {
+  top: 50% !important;
+  left: 50% !important;
+  animation: orbit2 25s linear infinite;
+  animation-delay: -5s; /* Startet bei anderem Punkt */
+}
+
+@keyframes orbit2 {
+  from { transform: rotate(60deg) translateX(280px) rotate(-60deg); }
+  to { transform: rotate(420deg) translateX(280px) rotate(-420deg); }
+}
+
+.spotify-player:nth-child(4) {
+  top: 50% !important;
+  left: 50% !important;
+  animation: orbit3 30s linear infinite;
+  animation-delay: -10s; /* Startet bei anderem Punkt */
+}
+
+@keyframes orbit3 {
+  from { transform: rotate(120deg) translateX(360px) rotate(-120deg); }
+  to { transform: rotate(480deg) translateX(360px) rotate(-480deg); }
+}
+
+.spotify-player:nth-child(5) {
+  top: 50% !important;
+  left: 50% !important;
+  animation: orbit4 35s linear infinite;
+  animation-delay: -15s; /* Startet bei anderem Punkt */
+}
+
+@keyframes orbit4 {
+  from { transform: rotate(180deg) translateX(440px) rotate(-180deg); }
+  to { transform: rotate(540deg) translateX(440px) rotate(-540deg); }
+}
+
+.spotify-player:nth-child(6) {
+  top: 50% !important;
+  left: 50% !important;
+  animation: orbit5 40s linear infinite;
+  animation-delay: -20s; /* Startet bei anderem Punkt */
+}
+
+@keyframes orbit5 {
+  from { transform: rotate(240deg) translateX(520px) rotate(-240deg); }
+  to { transform: rotate(600deg) translateX(520px) rotate(-600deg); }
+}
+
+/* Kreisrunder Player Container */
+.player-disc {
+  position: relative;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
-  animation: waveRing 1.5s ease-out infinite;
-  box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(147, 51, 234, 0.3),
+    inset 0 0 20px rgba(147, 51, 234, 0.2);
+  overflow: hidden;
+  flex-shrink: 0;
+  min-width: 160px;
+  min-height: 160px;
+  background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1), transparent);
 }
 
-.ring-1 {
-  width: 180px;
-  height: 180px;
-  animation-delay: 0s;
+/* Planet-spezifische Farben */
+.spotify-player:nth-child(2) .player-disc {
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(59, 130, 246, 0.4),
+    inset 0 0 20px rgba(59, 130, 246, 0.3);
+  background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1), transparent);
 }
 
-.ring-2 {
-  width: 180px;
-  height: 180px;
-  animation-delay: 0.5s;
+.spotify-player:nth-child(3) .player-disc {
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(236, 72, 153, 0.4),
+    inset 0 0 20px rgba(236, 72, 153, 0.3);
+  background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.1), transparent);
 }
 
-.ring-3 {
-  width: 180px;
-  height: 180px;
-  animation-delay: 1s;
+.spotify-player:nth-child(4) .player-disc {
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(34, 211, 238, 0.4),
+    inset 0 0 20px rgba(34, 211, 238, 0.3);
+  background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.1), transparent);
 }
 
-@keyframes waveRing {
-  0% {
-    width: 180px;
-    height: 180px;
-    opacity: 1;
-    border-color: #ff4757;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  25% {
-    border-color: #ff4757;
-    opacity: 0.8;
-  }
-  50% {
-    border-color: #40e0d0;
-    opacity: 0.6;
-  }
-  75% {
-    border-color: #40e0d0;
-    opacity: 0.3;
-  }
-  100% {
-    width: 400px;
-    height: 400px;
-    opacity: 0;
-    border-color: #ff4757;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
+.spotify-player:nth-child(5) .player-disc {
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(251, 146, 60, 0.4),
+    inset 0 0 20px rgba(251, 146, 60, 0.3);
+  background: radial-gradient(ellipse at center, rgba(251, 146, 60, 0.1), transparent);
+}
+
+.spotify-player:nth-child(6) .player-disc {
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(250, 204, 21, 0.4),
+    inset 0 0 20px rgba(250, 204, 21, 0.3);
+  background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.1), transparent);
+}
+
+.player-disc:hover {
+  transform: scale(1.1);
+  filter: brightness(1.3);
 }
 
 /* Album Cover */
@@ -845,94 +1132,63 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   background-size: cover;
   background-position: center;
-  background-color: #444;
-  transition: transform 0.3s ease;
+  opacity: 0.9;
+  transition: all 0.4s ease;
 }
 
-.spotify-player:hover .album-cover {
-  transform: scale(1.1);
-}
-
-.spotify-player.is-playing .album-cover {
-  animation: albumRotate 20s linear infinite;
-}
-
-@keyframes albumRotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Play Button */
-.spotify-player .play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 5;
-}
-
-.spotify-player .play-button:hover {
-  background: rgba(0, 0, 0, 0.9);
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.spotify-player .play-button svg {
-  width: 24px;
-  height: 24px;
-  fill: #ffffff;
-  display: block;
-}
-
-/* Play Icon positioning - triangle shifted right for visual balance */
-.spotify-player .play-button svg path[d="M8 5v14l11-7z"] {
-  transform: translateX(2px);
-}
-
-/* Track Info */
-.track-info {
-  position: absolute;
-  bottom: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.spotify-player:hover .track-info {
+.player-disc:hover .album-cover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
   opacity: 1;
 }
 
-.track-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0 0 4px 0;
+/* Play Button - KOMPLETT SCHWARZ */
+.play-button {
+  position: relative;
+  z-index: 3;
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px);
 }
 
-.track-artist {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  color: #cccccc;
-  margin: 0;
+.play-button:hover {
+  background: rgba(0, 0, 0, 0.9) !important;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.play-button svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  margin-left: 2px;
+}
+
+/* Pause Icon (2 Balken) */
+.pause-icon {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pause-bar {
+  width: 3px;
+  height: 16px;
+  background: white;
+  border-radius: 1px;
 }
 
 /* Spotify Link */
@@ -940,57 +1196,234 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 30px;
-  height: 30px;
-  border: none;
+  z-index: 4;
+  width: 24px;
+  height: 24px;
+  color: #1DB954;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 5;
-}
-
-.spotify-player:hover .spotify-link {
-  opacity: 1;
 }
 
 .spotify-link:hover {
-  background: #1DB954;
-  transform: scale(1.1);
+  opacity: 1;
+  transform: scale(1.2);
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .spotify-link svg {
-  width: 16px;
-  height: 16px;
-  color: #ffffff;
+  width: 14px;
+  height: 14px;
 }
 
-/* Loading Spinner */
-.loading-spinner {
+/* Track Info - Hover Card */
+.track-info {
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 12px 16px;
   text-align: center;
-  padding: 4rem 0;
+  width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(10px);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.4),
+    0 0 20px currentColor;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top: 4px solid #ffffff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
+/* Farbangepasste Track-Info Glows */
+.spotify-player:nth-child(1):hover .track-info { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.5); }
+.spotify-player:nth-child(2):hover .track-info { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.5); }
+.spotify-player:nth-child(3):hover .track-info { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(236, 72, 153, 0.5); }
+.spotify-player:nth-child(4):hover .track-info { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 211, 238, 0.5); }
+.spotify-player:nth-child(5):hover .track-info { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(251, 146, 60, 0.5); }
+.spotify-player:nth-child(6):hover .track-info { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(250, 204, 21, 0.5); }
+
+.spotify-player:hover .track-info {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+.track-info::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid rgba(0, 0, 0, 0.9);
+}
+
+.track-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-artist {
+  color: #bebebe;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+
+/* Shooting Stars */
+@keyframes shootingStar {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg);
+    opacity: 1;
   }
-  to {
-    transform: rotate(360deg);
+  100% {
+    transform: translateX(300px) translateY(300px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+.shooting-star {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, white, transparent);
+  animation: shootingStar 3s linear infinite;
+  z-index: 5;
+}
+
+/* Verschiedene Shooting Stars */
+.spotify-players-container .shooting-star:nth-of-type(1) {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.spotify-players-container .shooting-star:nth-of-type(2) {
+  top: 30%;
+  left: 80%;
+  animation-delay: 1.5s;
+  animation-duration: 4s;
+}
+
+.spotify-players-container .shooting-star:nth-of-type(3) {
+  top: 60%;
+  left: 20%;
+  animation-delay: 3s;
+  animation-duration: 2.5s;
+}
+
+/* Mobile Anpassungen - kleinere Orbits */
+@media (max-width: 768px) {
+  .spotify-player:nth-child(1) .player-disc {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .player-disc {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+    min-height: 100px;
+  }
+  
+  @keyframes orbit1 {
+    from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+  }
+  
+  @keyframes orbit2 {
+    from { transform: rotate(60deg) translateX(170px) rotate(-60deg); }
+    to { transform: rotate(420deg) translateX(170px) rotate(-420deg); }
+  }
+  
+  @keyframes orbit3 {
+    from { transform: rotate(120deg) translateX(220px) rotate(-120deg); }
+    to { transform: rotate(480deg) translateX(220px) rotate(-480deg); }
+  }
+  
+  @keyframes orbit4 {
+    from { transform: rotate(180deg) translateX(270px) rotate(-180deg); }
+    to { transform: rotate(540deg) translateX(270px) rotate(-540deg); }
+  }
+  
+  @keyframes orbit5 {
+    from { transform: rotate(240deg) translateX(320px) rotate(-240deg); }
+    to { transform: rotate(600deg) translateX(320px) rotate(-600deg); }
+  }
+  
+  .track-info {
+    width: 160px;
+    bottom: -70px;
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .spotify-player:nth-child(1) .player-disc {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .player-disc {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+  }
+  
+  .play-button {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .play-button svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  @keyframes orbit1 {
+    from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+  }
+  
+  @keyframes orbit2 {
+    from { transform: rotate(72deg) translateX(110px) rotate(-72deg); }
+    to { transform: rotate(432deg) translateX(110px) rotate(-432deg); }
+  }
+  
+  @keyframes orbit3 {
+    from { transform: rotate(144deg) translateX(140px) rotate(-144deg); }
+    to { transform: rotate(504deg) translateX(140px) rotate(-504deg); }
+  }
+  
+  @keyframes orbit4 {
+    from { transform: rotate(216deg) translateX(170px) rotate(-216deg); }
+    to { transform: rotate(576deg) translateX(170px) rotate(-576deg); }
+  }
+  
+  @keyframes orbit5 {
+    from { transform: rotate(288deg) translateX(200px) rotate(-288deg); }
+    to { transform: rotate(648deg) translateX(200px) rotate(-648deg); }
   }
 }
 
@@ -1000,6 +1433,8 @@ body {
   width: 90%;
   margin: 2rem auto;
   padding: 1rem 0;
+  z-index: 2;
+  position: relative;
 }
 
 .stats-grid {
@@ -1018,7 +1453,7 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: clamp(2.8rem, 7vw, 4.5rem);
   font-weight: 800;
-  color: #000000;
+  color: #ffffff;
   line-height: 1.1;
   margin-bottom: 0.25em;
 }
@@ -1034,7 +1469,7 @@ body {
 .stat-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: clamp(0.8rem, 1.8vw, 1rem);
-  color: #333333;
+  color: #cccccc;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -1055,6 +1490,8 @@ body {
   width: 90%;
   margin: 2rem auto;
   text-align: center;
+  z-index: 2;
+  position: relative;
 }
 
 .zoom-list {
@@ -1067,7 +1504,7 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 600;
-  color: #000000;
+  color: #ffffff;
   padding: 0.5em 0;
   margin-bottom: 0.5em;
   opacity: 0;
@@ -1084,6 +1521,8 @@ body {
   max-width: 1000px;
   width: 90%;
   margin: 2rem auto;
+  z-index: 2;
+  position: relative;
 }
 
 .video-grid {
@@ -1151,7 +1590,9 @@ body {
   opacity: 1;
 }
 
-.play-button {
+/* Du hast .play-button mehrfach definiert. Stelle sicher, dass du das beabsichtigst. */
+/* Dieser Stil wird wahrscheinlich von der späteren Definition in der Music Section überschrieben. */
+.video-item .play-button {
   width: 60px;
   height: 60px;
   background: rgba(255, 255, 255, 0.9);
@@ -1168,7 +1609,7 @@ body {
   transform: scale(1);
 }
 
-.play-button svg {
+.video-item .play-button svg {
   width: 24px;
   height: 24px;
   color: #000;
@@ -1262,6 +1703,9 @@ body {
   max-width: 1200px;
   width: 90%;
   margin: 2rem auto;
+  padding: 1rem 0;
+  z-index: 2;
+  position: relative;
 }
 
 .contact-grid {
@@ -1389,7 +1833,7 @@ body {
 .social-link svg {
   width: 24px;
   height: 24px;
-  color: #ffffff; /* Weiße Icons */
+  color: #ffffff;
 }
 
 /* Contact Form */
@@ -1490,71 +1934,57 @@ body {
 
 /* ===== GALLERY SECTION ===== */
 .gallery-container {
-  max-width: 1200px; /* Max-Breite der Galerie */
-  width: 90%; /* Oder 100% wenn padding von page-section kommt */
-  margin: 2rem auto; /* Zentrierung und Abstand */
+  max-width: 1200px;
+  width: 90%;
+  margin: 2rem auto;
+  z-index: 2;
+  position: relative;
 }
 
 .gallery-grid {
   display: grid;
-  /* Standard: responsive Spalten, min. 150px breit */
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem; /* Etwas kleinerer Gap für Mobile First */
-  grid-auto-flow: dense; /* Wichtig für lückenloses Layout */
-  grid-auto-rows: 150px; /* Basis-Höhe für Reihen */
+  gap: 1rem;
+  grid-auto-flow: dense;
+  grid-auto-rows: 150px;
   align-items: stretch;
 }
 
-/* Anpassung für mittlere Bildschirme (Tablets, kleine Desktops) */
 @media (min-width: 768px) {
   .gallery-grid {
-    /* Deine ursprünglichen Werte waren 4 Spalten und 200px Reihenhöhe */
-    /* Die custom-gallery-grid hatte repeat(3, 1fr) und 150px Reihen */
-    /* Wähle, was besser passt. Hier ein Kompromiss oder deine Tablet-spezifischen Werte: */
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Flexibler */
-    /* Oder fester: grid-template-columns: repeat(4, 1fr); */
-    gap: 1.5rem; /* Etwas größerer Gap */
-    grid-auto-rows: 180px; /* Angepasste Basis-Höhe */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    grid-auto-rows: 180px;
   }
 }
 
-/* Anpassung für größere Bildschirme (Desktops) */
 @media (min-width: 1024px) {
   .gallery-grid {
-    /* Deine ursprünglichen Werte waren 6 Spalten und 180px Reihenhöhe */
-    /* Die custom-gallery-grid hatte repeat(auto-fill, minmax(200px, 1fr)) und 180px Reihen */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Flexibler */
-    /* Oder fester: grid-template-columns: repeat(6, 1fr); */
-    gap: 1.5rem; /* Konsistenter Gap */
-    grid-auto-rows: 200px; /* Basis-Höhe für Reihen auf Desktops */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    grid-auto-rows: 200px;
   }
 }
 
-/* Grundlegendes Styling für jedes Galerie-Item */
 .gallery-item {
-  background: rgba(255, 255, 255, 0.05); /* Optional, wenn Bilder den Raum füllen */
-  border-radius: 12px; /* Wichtig für abgerundete Ecken */
-  overflow: hidden; /* Stellt sicher, dass Inhalt (Bild) die Rundung respektiert */
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Optionaler Rand */
-  opacity: 1; /* Standardmäßig sichtbar, Animationen ggf. separat */
-  transform: none; /* Standard Transform */
-  will-change: transform; /* Für Hover-Performance */
-  min-width: 0; /* Verhindert Grid-Überlauf */
-
-  /* Standardmäßig spannt jedes Item 1 Zeile und 1 Spalte,
-     außer es wird durch spezifische Klassen überschrieben.
-     aspect-ratio hier kann problematisch sein, wenn grid-auto-rows einen festen Wert hat
-     und die Spans variieren. Besser die Spans steuern lassen. */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 1;
+  transform: none;
+  will-change: transform;
+  min-width: 0;
   grid-column: span 1;
   grid-row: span 1;
 }
 
-.gallery-item:focus-visible { /* Bessere Sichtbarkeit des Fokus */
-  outline: 2px solid #40e0d0; /* Beispielhafte Fokus-Farbe */
+.gallery-item:focus-visible {
+  outline: 2px solid #40e0d0;
   outline-offset: 2px;
-  box-shadow: 0 0 15px rgba(64, 224, 208, 0.5); /* Optionaler Glow-Effekt */
+  box-shadow: 0 0 15px rgba(64, 224, 208, 0.5);
 }
 
 
@@ -1563,62 +1993,47 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Größen-Klassen für Galerie-Items (basierend auf deiner globalen CSS Idee) */
-/* Kleine Kacheln (Standard, falls keine andere Größenklasse angewendet wird) */
 .gallery-item--small {
   grid-column: span 1;
   grid-row: span 1;
-  /* aspect-ratio: 1 / 1;  Falls benötigt, aber grid-row-span ist oft besser */
 }
 
-/* Mittelgroße Kacheln */
 .gallery-item--medium {
-  grid-column: span 2; /* Nimmt 2 Spalten ein */
-  grid-row: span 1;    /* Nimmt 1 Zeile ein (oder span 2 für höher) */
-  /* aspect-ratio: 4 / 3; */
+  grid-column: span 2;
+  grid-row: span 1;
 }
-@media (max-width: 767px) { /* Auf sehr kleinen Schirmen ggf. anpassen */
+@media (max-width: 767px) {
   .gallery-item--medium {
-    grid-column: span 1; /* Oder was immer für dein Mobile-Layout passt */
-    grid-row: span 2;    /* Beispiel: höher statt breiter */
+    grid-column: span 1;
+    grid-row: span 2;
   }
 }
 
-
-/* Große Kacheln */
 .gallery-item--large {
-  grid-column: span 2; /* Nimmt 2 Spalten ein */
-  grid-row: span 2;    /* Nimmt 2 Zeilen ein */
-  /* aspect-ratio: 16 / 9; */
+  grid-column: span 2;
+  grid-row: span 2;
 }
-@media (max-width: 767px) { /* Auf sehr kleinen Schirmen ggf. anpassen */
+@media (max-width: 767px) {
   .gallery-item--large {
-    grid-column: span 1; /* Oder was immer für dein Mobile-Layout passt */
-    grid-row: span 2;    /* Beispiel: schmaler aber hoch */
+    grid-column: span 1;
+    grid-row: span 2;
   }
 }
 
-/* Wenn du eine 'tall' Klasse hast: */
 .gallery-item--tall {
   grid-column: span 1;
   grid-row: span 2;
-  /* aspect-ratio: 3 / 4; */
 }
 
-
-/* Container für das Next.js Image, damit 'fill' funktioniert */
 .gallery-image {
   position: relative;
   width: 100%;
-  height: 100%; /* Wichtig für fill */
-  overflow: hidden; /* Stellt sicher, dass das Bild innerhalb der Rundung bleibt */
-  border-radius: इन्헤रिйт; /* Erbt border-radius vom .gallery-item, falls dort gesetzt */
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
 }
 
-/* Das eigentliche <img> Tag (wird von Next.js <Image> erzeugt) */
-/* .gallery-img wird der className auf <Image> sein, falls du es brauchst */
 .gallery-image img, .gallery-img {
-  /* object-fit und object-position werden per inline-style vom TSX gesetzt */
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1627,7 +2042,6 @@ body {
   transform: scale(1.05);
 }
 
-/* Overlay und Info Styles (können von deinem globalen CSS übernommen werden) */
 .gallery-overlay {
   position: absolute;
   inset: 0;
@@ -1637,7 +2051,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: इन्헤रिйт; /* Erbt border-radius */
+  border-radius: inherit;
 }
 
 .gallery-item:hover .gallery-overlay {
@@ -1661,7 +2075,7 @@ body {
 .zoom-icon svg {
   width: 24px;
   height: 24px;
-  color: #000; /* Oder deine gewünschte Farbe */
+  color: #000;
 }
 
 .gallery-info {
@@ -1673,7 +2087,7 @@ body {
   color: white;
   transform: translateY(100%);
   transition: transform 0.3s ease;
-  background: linear-gradient(transparent, rgba(0,0,0,0.6) 80%); /* Subtilerer Gradient */
+  background: linear-gradient(transparent, rgba(0,0,0,0.6) 80%);
 }
 
 .gallery-item:hover .gallery-info {
@@ -1681,7 +2095,7 @@ body {
 }
 
 .gallery-info h3 {
-  font-family: 'Inter', sans-serif; /* Oder deine bevorzugte Schriftart */
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   color: #ffffff;
@@ -1693,45 +2107,43 @@ body {
 /* ===== GALLERY MODAL (LIGHTBOX) ===== */
 .gallery-modal {
   position: fixed;
-  inset: 0; /* top, right, bottom, left = 0 */
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9); /* Etwas transparenter für Kontext */
-  backdrop-filter: blur(8px); /* Weichzeichner-Effekt für den Hintergrund */
-  z-index: 10000; /* Sehr hoher z-index, um über allem zu liegen */
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem; /* Kleinerer Padding für mehr Bildfläche auf Mobile */
+  padding: 1rem;
 }
 
 .modal-content {
   position: relative;
-  max-width: 95vw;   /* Erlaube dem Bild, breiter zu sein */
-  max-height: 95vh;  /* Erlaube dem Bild, höher zu sein */
-  width: 100%; /* Füllt den verfügbaren Platz bis max-width/height */
-  height: 100%;/* Füllt den verfügbaren Platz bis max-width/height */
-  display: flex; /* Für Zentrierung des Bildes, falls es kleiner ist als der Container */
+  max-width: 95vw;
+  max-height: 95vh;
+  width: 100%;
+  height: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px; /* Optional: Abrundung für den Content-Bereich selbst */
-  overflow: hidden; /* Verhindert, dass das Bild übersteht, falls Rundung hier gesetzt */
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-/* Die Klasse .modal-image wird dem Next.js <Image> Tag im Modal zugewiesen */
 .modal-image {
-  object-fit: contain !important; /* Stellt sicher, dass das ganze Bild sichtbar ist */
-  border-radius: 4px; /* Leichte Abrundung für das Bild selbst */
-  /* width und height werden von 'fill' und dem Eltercontainer .modal-content gesteuert */
+  object-fit: contain !important;
+  border-radius: 4px;
 }
 
 .modal-close {
   position: absolute;
-  top: 10px; /* Näher am Rand, innerhalb des sichtbaren Bereichs */
+  top: 10px;
   right: 10px;
   width: 40px;
   height: 40px;
-  background: rgba(30, 30, 30, 0.7); /* Etwas sichtbarer */
+  background: rgba(30, 30, 30, 0.7);
   border: none;
   border-radius: 50%;
   display: flex;
@@ -1739,7 +2151,7 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  z-index: 10001; /* Über dem Modal-Inhalt */
+  z-index: 10001;
 }
 
 .modal-close:hover {
@@ -1747,34 +2159,25 @@ body {
   transform: scale(1.1);
 }
 
-.modal-close:focus-visible { /* Deutlicher Fokus für den Schließen-Button */
+.modal-close:focus-visible {
   outline: 2px solid #40e0d0;
   outline-offset: 2px;
 }
 
 .modal-close svg {
-  width: 22px; /* Etwas kleiner für den 40px Button */
+  width: 22px;
   height: 22px;
-  color: #ffffff; /* SVG Farbe */
+  color: #ffffff;
 }
 
-/* Media Query für größere Bildschirme, falls der Schließen-Button außerhalb sein soll */
 @media (min-width: 768px) {
   .gallery-modal {
-    padding: 2rem; /* Größerer Padding auf größeren Schirmen */
+    padding: 2rem;
   }
   .modal-close {
-    /* Hier deine Werte für größere Screens, z.B.: */
     top: -15px;
     right: -15px;
-    /* Oder weiterhin innerhalb, aber größer:
-    top: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
-    */
   }
-  /* .modal-close svg { width: 24px; height: 24px; } */
 }
 
 /* ===== RESPONSIVE ===== */
@@ -1843,8 +2246,6 @@ body {
     justify-content: center;
   }
 
-  /* Hier wurden unnötige gallery-grid Regeln entfernt, da die spezifischeren Regeln bei 1024px, 768px und 767px greifen */
-
   .gallery-item.featured {
     grid-column: 1;
   }
@@ -1868,34 +2269,42 @@ body {
   }
 
   .spotify-players-container {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 1.5rem;
-    height: auto;
+    height: auto; /* Höhe passt sich dem Inhalt an */
+    grid-template-columns: repeat(2, 1fr); /* 2 Spalten auf Mobile */
+    gap: 1.5rem; /* Weniger Abstand auf Mobile */
     padding: 1rem;
   }
-
   .spotify-player {
-    width: 150px;
-    height: 150px;
+    width: 140px; /* Etwas kleiner für Mobile */
+    height: 140px;
+    transform: none; /* Wichtig: Transform entfernen */
   }
-
-  .play-button {
+  .spotify-player .play-button {
     width: 50px;
     height: 50px;
   }
-
-  .play-button svg {
+  .spotify-player .play-button svg {
     width: 20px;
     height: 20px;
   }
-
-  .floating-orb {
-    display: none;
+  .spotify-player .spotify-link {
+    width: 25px;
+    height: 25px;
   }
+  .spotify-player .spotify-link svg {
+    width: 12px;
+    height: 12px;
+  }
+}
 
-  .floating-line {
-    display: none;
+@media (min-width: 769px) and (max-width: 1200px) {
+  .spotify-players-container {
+    grid-template-columns: repeat(3, 1fr); /* 3 Spalten auf mittleren Bildschirmen */
+  }
+  .spotify-player {
+    width: 160px;
+    height: 160px;
+    transform: none; /* Wichtig: Transform entfernen */
   }
 }
 
@@ -1906,4 +2315,51 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+
+/* SECTION ÜBERGÄNGE - in globals.css */
+
+/* Übergang vor der Music Section */
+section:has(+ #my-music) {
+  position: relative;
+}
+
+section:has(+ #my-music)::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(26, 26, 46, 0.3) 30%,
+    rgba(26, 26, 46, 0.6) 60%,
+    #1a1a2e 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Übergang nach der Music Section */
+#my-music + section {
+  position: relative;
+  margin-top: -100px;
+  z-index: 50;
+}
+
+#my-music + section::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(to bottom,
+    #000000 0%,
+    rgba(0, 0, 0, 0.8) 30%,
+    rgba(0, 0, 0, 0.4) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
 }

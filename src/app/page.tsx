@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <>
       <ScrollBackground />
-      <main className="relative">
+      <main className="relative bg-black"> {/* Fügen Sie bg-black hinzu oder entfernen Sie alle bg-farben */}
         <LandingSection />
         <BiographySection />
         <VinylCollectionSection/>

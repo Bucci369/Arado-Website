@@ -21,14 +21,14 @@ export default function ClubsSection() {
       id="clubs" 
       className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
       style={{
-        background: 'linear-gradient(to bottom, #050508 0%, #0f1419 100%)',
+        background: '#000000',
         position: 'relative'
       }}
     >
       <div className="section-header mb-16">
         <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
-          <span className="title-line block">Clubs &</span>
-          <span className="title-line block">Events</span>
+          <span className="title-line block">Dancefloor</span>
+          <span className="title-line block">Odyssey</span>
         </h2>
         <div className="title-underline w-12 h-1 bg-gradient-to-r from-cyan-200 to-cyan-400 mx-auto"></div>
       </div>

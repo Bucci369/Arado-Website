@@ -8,14 +8,14 @@ export default function VideoSection() {
       id="videos" 
       className="page-section section-is-white new-style-section"
       style={{
-        background: 'linear-gradient(to bottom, #3a5668 0%, #1a2832 100%)',
+        background: '#000000',
         position: 'relative'
       }}
     >
       <div className="section-header">
         <h2 className="section-title">
-          <span className="title-line">My</span>
-          <span className="title-line">Videos</span>
+          <span className="title-line">Motion</span>
+          <span className="title-line">Moments</span>
         </h2>
         <div className="title-underline"></div>
       </div>

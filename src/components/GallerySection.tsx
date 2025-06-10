@@ -92,14 +92,14 @@ export default function GallerySection() {
         id="gallery"
         className="page-section section-is-white new-style-section"
         style={{
-          background: 'linear-gradient(to bottom, #0f1419 0%, #3a5668 100%)',
+          background: '#000000',
           position: 'relative'
         }}
       >
         <div className="section-header">
           <h2 className="section-title">
-            <span className="title-line">My</span>
-            <span className="title-line">Gallery</span>
+            <span className="title-line">Visual</span>
+            <span className="title-line">Echos</span>
           </h2>
           <div className="title-underline"></div>
         </div>

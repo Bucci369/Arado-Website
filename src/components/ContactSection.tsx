@@ -28,14 +28,14 @@ export default function ContactSection() {
       id="contact" 
       className="page-section section-is-white new-style-section"
       style={{
-        background: 'linear-gradient(to bottom, #1a2832 0%, #050508 100%)',
+        background: '#000000',
         position: 'relative'
       }}
     >
       <div className="section-header">
         <h2 className="section-title">
           <span className="title-line">Contact &</span>
-          <span className="title-line">Booking</span>
+          <span className="title-line">Transmissions</span>
         </h2>
         <div className="title-underline"></div>
       </div>

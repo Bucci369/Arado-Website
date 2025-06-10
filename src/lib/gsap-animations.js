@@ -14,27 +14,28 @@ export function initGSAPAnimations() {
   gsap.registerPlugin(ScrollTrigger)
   isInitialized = true
 
-  // Hero Section Observer
+  // Hero Section Observer (für Slogan und Scroll-Indikator)
   const heroSection = document.getElementById('hero')
   if (heroSection) {
     const heroObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+        // Der Threshold wurde auf 0.05 (5%) reduziert, damit der Slogan früher erscheint.
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.05) {
           entry.target.classList.add('is-visible')
           
-          // Scroll-Indikator einblenden
+          // Scroll-Indikator einblenden (Delay von 2.5 auf 2.0 reduziert)
           const scrollIndicator = entry.target.querySelector('.scroll-down-indicator')
           if (scrollIndicator) {
             gsap.to(scrollIndicator, { 
               opacity: 1, 
               duration: 0.8, 
-              delay: 2.5, 
+              delay: 2.0, 
               ease: "power2.out" 
             })
           }
         }
       })
-    }, { threshold: 0.5 })
+    }, { threshold: 0.05 })
     heroObserver.observe(heroSection)
   }
 
@@ -59,26 +60,6 @@ export function initGSAPAnimations() {
     const observer = new IntersectionObserver(observerCallback, generalObserverOptions)
     sectionsToObserve.forEach(section => observer.observe(section))
   }
-
-  // GSAP ScrollTrigger Animationen
-  
-  // Basis Sektionen Animation - DISABLED (causes black bars)
-  // gsap.utils.toArray(".page-section").forEach((section) => {
-  //   gsap.fromTo(section, 
-  //     { opacity: 0, y: 80 }, 
-  //     {
-  //       opacity: 1, 
-  //       y: 0, 
-  //       duration: 1, 
-  //       ease: "power2.out",
-  //       scrollTrigger: { 
-  //         trigger: section, 
-  //         start: "top 80%", 
-  //         toggleActions: "play none none reverse" 
-  //       }
-  //     }
-  //   )
-  // })
 
   // Titel Animationen
   gsap.utils.toArray(".title-line").forEach((el, i) => {
@@ -179,7 +160,6 @@ export function initGSAPAnimations() {
         if (isNaN(targetValue)) return
         if (isNaN(startValue)) { startValue = 0 }
 
-        statNumberElement.textContent = formatNumberDE(startValue)
         let animatedValue = { val: startValue }
 
         gsap.to(animatedValue, {
@@ -202,15 +182,15 @@ export function initGSAPAnimations() {
     })
   }
   
-  // Zoom-In Animation für Listen - DRAMATISCHER & FRÜHER
+  // Zoom-In Animation für Listen (Labels & Clubs) - Noch früher starten
   gsap.utils.toArray('.zoom-list-item').forEach((item, index) => {
     gsap.fromTo(item,
       { 
         opacity: 0, 
-        scale: 0.1, // Startet viel kleiner für dramatischeren Effekt
-        y: 80, // Mehr vertikale Bewegung
-        rotation: -15, // Leichte Rotation hinzufügen
-        filter: "blur(10px)" // Blur Effekt für mehr Drama
+        scale: 0.1, 
+        y: 80, 
+        rotation: -15, 
+        filter: "blur(10px)" 
       },
       {
         opacity: 1,
@@ -218,46 +198,17 @@ export function initGSAPAnimations() {
         y: 0,
         rotation: 0,
         filter: "blur(0px)",
-        duration: 1.2, // Längere Duration für smootheren Effekt
-        delay: index * 0.08, // Schnellerer Stagger
-        ease: "back.out(2.5)", // Dramatischer bounce Effekt
+        duration: 1.2,
+        delay: index * 0.08,
+        ease: "back.out(2.5)",
         scrollTrigger: {
           trigger: item,
-          start: "top 95%", // Früher starten (95% statt 90%)
+          start: "top 98%",
           toggleActions: "play none none reverse",
         }
       }
     )
   })
-
-  // Spotify Player Animationen - DISABLED FOR DEBUGGING
-  // const musikSection = document.getElementById('meine-musik')
-  // if (musikSection) {
-  //   gsap.utils.toArray('#meine-musik .spotify-player').forEach((player, index) => {
-  //     gsap.fromTo(player,
-  //       { 
-  //         opacity: 0,
-  //         scale: 0.8,
-  //         y: 50,
-  //         rotation: 15
-  //       },
-  //       {
-  //         opacity: 1,
-  //         scale: 1,
-  //         y: 0,
-  //         rotation: 0,
-  //         duration: 0.8,
-  //         delay: 0.4 + index * 0.1,
-  //         ease: "power2.out",
-  //         scrollTrigger: {
-  //           trigger: musikSection,
-  //           start: "top 70%",
-  //           toggleActions: "play none none reverse"
-  //         }
-  //       }
-  //     )
-  //   })
-  // }
 
   // Video Items Animation
   gsap.utils.toArray('.video-item').forEach((item, index) => {
@@ -351,7 +302,8 @@ export function initGSAPAnimations() {
     )
   }
 
-  console.log('GSAP Animationen initialisiert')
+  // Die Musiksektion Karussell-Animation wurde in MusicSection.tsx verschoben
+  // console.log('GSAP Animationen initialisiert') // Dies ist jetzt überflüssig hier
 }
 
 export function cleanupGSAPAnimations() {

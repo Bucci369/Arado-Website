@@ -16,18 +16,18 @@ export default function ScrollBackground() {
     scrollYProgress,
     [0, 0.08, 0.12, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1],
     [
-      '#050508', // Landing start (matches original gradient start)
-      '#0f1419', // Landing end (matches original gradient end)
-      '#0f1419', // Bio start (seamless transition)
-      '#1a2832', // Bio end
-      '#ffffff', // Music (white section)
-      '#3a5668', // Stats
-      '#1a2832', // Labels
-      '#050508', // Clubs
-      '#0f1419', // Gallery
-      '#3a5668', // Video
-      '#1a2832', // Contact
-      '#050508'  // Contact end
+      '#000000', // Landing start (matches original gradient start)
+      '#000000', // Landing end (matches original gradient end)
+      '#000000', // Bio start (seamless transition)
+      '#000000', // Bio end
+      '#000000', // Music (white section)
+      '#000000', // Stats
+      '#000000', // Labels
+      '#000000', // Clubs
+      '#000000', // Gallery
+      '#000000', // Video
+      '#000000', // Contact
+      '#000000'  // Contact end
     ]
   )
 

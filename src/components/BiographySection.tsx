@@ -263,7 +263,7 @@ export default function BiographySection() {
       id="about-me" 
       className="page-section"
       style={{
-        background: 'linear-gradient(to bottom, #0f1419 0%, #1a2832 100%)',
+        background: '#000000',
         position: 'relative'
       }}
     >
@@ -274,8 +274,8 @@ export default function BiographySection() {
       
       <div className="section-header">
         <h2 className="section-title">
-          <span className="title-line">About</span>
-          <span className="title-line">me</span>
+          <span className="title-line">The</span>
+          <span className="title-line">journey</span>
         </h2>
         <div className="title-underline"></div>
       </div>

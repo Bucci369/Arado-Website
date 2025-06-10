@@ -404,7 +404,7 @@ export default function LandingSection() {
         ref={sectionRef}
         className="page-section min-h-screen relative flex flex-col items-center justify-center overflow-hidden"
         style={{
-          background: 'linear-gradient(180deg, #050508 0%, #0f1419 100%)',
+          background: '#000000',
           marginBottom: 0, 
           paddingBottom: 0, 
           minHeight: '100vh', 

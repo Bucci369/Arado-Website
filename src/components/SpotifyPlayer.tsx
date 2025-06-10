@@ -150,7 +150,7 @@ export default function SpotifyPlayer({
           <motion.div
             className="absolute inset-0 rounded-full"
             style={{
-              background: 'conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.1) 45deg, transparent 90deg, rgba(255,255,255,0.05) 180deg, transparent 270deg)',
+              background: '#000000',
             }}
             animate={{
               rotate: 360,
