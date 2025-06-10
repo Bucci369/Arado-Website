@@ -89,8 +89,7 @@ export default function VinylCollectionSection() {
   }, [isMounted, mouseX, mouseY]) 
 
   const animatedBackgroundStyle = isMounted ? { y: backgroundY } : { y: '0%' }
-  const animatedStackStyle = { y: stackY, rotateY: rotateSectionY, rotateX: rotateSectionX };
-
+  
   const getCirclePosition = (index: number, total: number) => {
     const angle = (index / total) * Math.PI * 2 - Math.PI / 2 
     const radius = 350 
