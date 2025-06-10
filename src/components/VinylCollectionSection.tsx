@@ -181,8 +181,7 @@ export default function VinylCollectionSection() {
     </span>
   </h2>
   
-  {/* Dieser Unterstrich benutzt jetzt auch die globalen CSS-Klassen */}
-  <div className="title-underline"></div>
+  
 </motion.div>
         
         {/* Pulsierender Unterstrich */}
