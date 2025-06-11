@@ -1,6 +1,18 @@
+// src/app/components/ClubsSection.tsx
 'use client'
 
+import { useRef, useEffect } from 'react' // useEffect hinzufügen, falls nicht vorhanden
+import { gsap } from 'gsap' // Sicherstellen, dass GSAP hier auch importiert ist
+import { ScrollTrigger } from 'gsap/ScrollTrigger' // Sicherstellen, dass ScrollTrigger hier auch importiert ist
+
+if (typeof window !== 'undefined') { // GSAP Plugins registrieren
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function ClubsSection() {
+  const sectionRef = useRef<HTMLElement>(null) 
+  
+
   const venues = [
     "Tomorrowland",
     "Watergate, Berlin",
@@ -18,6 +30,7 @@ export default function ClubsSection() {
 
   return (
     <section 
+      ref={sectionRef} 
       id="clubs" 
       className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
       style={{

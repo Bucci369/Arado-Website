@@ -51,61 +51,8 @@ export default function BiographySection() {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions)
     observer.observe(section)
-
-    // GSAP Animationen
-    // Basis Section Animation - DISABLED to prevent black bar
-    // gsap.fromTo(section, 
-    //   { opacity: 0, y: 80 }, 
-    //   {
-    //     opacity: 1, 
-    //     y: 0, 
-    //     duration: 1, 
-    //     ease: "power2.out",
-    //     scrollTrigger: { 
-    //       trigger: section, 
-    //       start: "top 80%", 
-    //       toggleActions: "play none none reverse" 
-    //     }
-    //   }
-    // )
-
-    // Titel Animation
-    const titleLines = section.querySelectorAll('.title-line')
-    titleLines.forEach((el, i) => {
-      gsap.fromTo(el, 
-        { opacity: 0, y: 50 }, 
-        {
-          opacity: 1, 
-          y: 0, 
-          duration: 0.8, 
-          delay: i * 0.15,
-          scrollTrigger: { 
-            trigger: el, 
-            start: "top 85%", 
-            toggleActions: "play none none reverse" 
-          }
-        }
-      )
-    })
-
-    // Underline Animation
-    const titleUnderline = section.querySelector('.title-underline')
-    if (titleUnderline) {
-      gsap.fromTo(titleUnderline, 
-        { opacity: 0, scaleX: 0 }, 
-        {
-          opacity: 1, 
-          scaleX: 1, 
-          duration: 0.6,
-          scrollTrigger: { 
-            trigger: titleUnderline, 
-            start: "top 85%", 
-            toggleActions: "play none none reverse" 
-          }
-        }
-      )
-    }
-
+  
+    
     // Bio Image Animation - basierend auf alter Website
     const bioImage = section.querySelector('.bio-image')
     if (bioImage) {

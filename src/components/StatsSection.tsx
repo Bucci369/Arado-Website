@@ -1,16 +1,18 @@
+// src/app/components/StatsSection.tsx
 'use client'
 
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Register GSAP plugin
+
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
 export default function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
+ 
 
   const stats = [
     {
@@ -88,13 +90,18 @@ export default function StatsSection() {
 
     // Cleanup
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      ScrollTrigger.getAll().forEach(trigger => {
+        // Tötet nur die Trigger, die mit .stat-item assoziiert sind, oder die durch diesen useEffect erstellt wurden
+        if (trigger.trigger && (trigger.trigger as HTMLElement).closest('.stat-item')) {
+            trigger.kill();
+        }
+      })
     }
   }, [])
 
   return (
     <section 
-      ref={sectionRef}
+      ref={sectionRef} // Ref für die Hook hier zuweisen
       id="stats" 
       className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
       style={{
@@ -104,14 +111,13 @@ export default function StatsSection() {
     >
       <div className="section-header mb-16">
         <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
-          <span className="title-line block"></span>
-          <span className="title-line block">Stats</span>
+          <span className="title-line block">Career</span>
+          <span className="title-line block">Milestones</span> {/* Oder "Stats" wie im Original */}
         </h2>
         <div className="title-underline w-12 h-1 bg-gradient-to-r from-cyan-400 to-cyan-600 mx-auto"></div>
       </div>
 
       <div className="stats-container max-w-4xl w-full mx-auto px-4">
-        {/* Stats Grid */}
         <div className="stats-grid grid grid-cols-2 gap-8 mb-10">
           {stats.map((stat, index) => (
             <div key={index} className="stat-item text-center">
@@ -130,7 +136,6 @@ export default function StatsSection() {
           ))}
         </div>
 
-        {/* Spotify Stats - Larger, centered */}
         <div className="spotify-item stat-item text-center">
           <span 
             className="stat-number spotify-plays block text-6xl md:text-7xl lg:text-8xl font-extrabold text-white leading-tight mb-4"

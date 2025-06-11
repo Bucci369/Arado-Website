@@ -1,10 +1,22 @@
+// src/app/components/VideoSection.tsx
 'use client'
 
+import { useRef, useEffect } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Image from 'next/image'
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function VideoSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  
+
   return (
     <section 
+      ref={sectionRef} 
       id="videos" 
       className="page-section section-is-white new-style-section"
       style={{
@@ -36,7 +48,7 @@ export default function VideoSection() {
             </div>
             <div className="video-info">
               <h3 className="video-title">Berghain Set 2024</h3>
-              <p className="video-description">Epic 4-hour journey through techno - Live from Berlin&apos;s legendary club</p>
+              <p className="video-description">Epic 4-hour journey through techno - Live from Berlin's legendary club</p>
             </div>
           </div>
 

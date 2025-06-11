@@ -31,7 +31,7 @@ body::before {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background-image: 
+  background-image:
     radial-gradient(1px 1px at 20% 30%, white, transparent),
     radial-gradient(1px 1px at 50% 50%, white, transparent),
     radial-gradient(1px 1px at 80% 60%, white, transparent);
@@ -46,7 +46,7 @@ body::after {
   position: fixed;
   top: -50%; left: -50%;
   width: 200%; height: 200%;
-  background: 
+  background:
     radial-gradient(ellipse at center, transparent 0%, rgba(147, 51, 234, 0.1) 40%, transparent 70%),
     radial-gradient(ellipse at 20% 80%, transparent 0%, rgba(59, 130, 246, 0.1) 40%, transparent 70%),
     radial-gradient(ellipse at 80% 20%, transparent 0%, rgba(236, 72, 153, 0.1) 40%, transparent 70%);
@@ -302,11 +302,13 @@ body::after {
   margin-bottom: 3.5rem;
   position: relative;
   z-index: 2;
-  transform: translateZ(0);
+  /* transform: translateZ(0);  <-- Kann beibehalten werden, ist aber oft nicht nötig, da GSAP dies verwaltet */
+  text-align: center; /* Sicherstellen, dass der Header zentriert ist */
+  width: 100%; /* Sicherstellen, dass der Header die volle Breite einnimmt */
 }
 
 .section-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', sans-serif; /* Behält die spezielle Schriftart bei */
   font-size: clamp(2.2rem, 5.5vw, 3.8rem);
   font-weight: 800;
   letter-spacing: 0.2em;
@@ -314,13 +316,16 @@ body::after {
   line-height: 1;
   margin-bottom: 0.8rem;
   position: relative;
+  color: #FFFFFF; /* Stellt sicher, dass die Grundfarbe Weiß ist */
+  /* Die Initial-Animation überlässt du GSAP, daher hier keine opacity/transform */
 }
 
 .title-line {
-  display: block;
-  color: #FFFFFF;
+  display: block; /* Wichtig, damit Y-Translation funktioniert, wenn mehrere Zeilen vorhanden sind */
+  /* color: #FFFFFF; <-- Wird bereits vom .section-title geerbt oder direkt gesetzt */
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.7));
-  transform: translateZ(0);
+  /* transform: translateZ(0); <-- Kann beibehalten werden */
+  /* Die Initial-Animation überlässt du GSAP, daher hier keine opacity/transform */
 }
 
 .title-underline {
@@ -329,14 +334,9 @@ body::after {
   background: linear-gradient(90deg, transparent 0%, rgba(147, 51, 234, 0.8) 20%, rgba(255, 255, 255, 1) 50%, rgba(59, 130, 246, 0.8) 80%, transparent 100%);
   box-shadow: 0 0 20px rgba(147, 51, 234, 0.6);
   margin: 0 auto;
-  animation: energyPulse 3s ease-in-out infinite;
   transform-origin: center;
-  transform: translateZ(0);
-}
-
-@keyframes energyPulse { 
-  0%, 100% { transform: scaleX(0.5) translateZ(0); opacity: 0.5; } 
-  50% { transform: scaleX(1.2) translateZ(0); opacity: 1; } 
+  /* transform: translateZ(0); <-- Kann beibehalten werden */
+  /* Die Initial-Animation überlässt du GSAP, daher hier keine opacity/transform */
 }
 
 /* ===== ABOUT SECTION (#ueber-mich) ===== */
@@ -359,11 +359,48 @@ body::after {
 }
 @keyframes ueberMichParticleFloat { 0% { transform: translateY(100vh) scale(0.3) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1) rotate(360deg); opacity: 0; } }
 
-.bio-content { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 900px; width: 100%; align-items: center; position: relative; z-index: 2; }
-@media (min-width: 768px) { .bio-content { grid-template-columns: 0.8fr 1.2fr; align-items: start; gap: 3rem; } .bio-image-wrapper { order: -1; } }
-.bio-text { text-align: left; }
-.bio-paragraph { font-size: clamp(0.95rem, 1.5vw, 1.05rem); line-height: 1.75; color: #b0b0b0; margin-bottom: 1.2rem; opacity: 0; transform: translateY(30px); will-change: transform, opacity; }
+.bio-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: 900px;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+@media (min-width: 768px) {
+    .bio-content {
+        grid-template-columns: 0.8fr 1.2fr;
+        align-items: start;
+        gap: 3rem;
+    }
+    .bio-image-wrapper {
+        order: -1;
+    }
+}
+.bio-text {
+    text-align: left;
+}
 
+/* Konsistente Schriftart und Schärfe für Fließtexte */
+.bio-paragraph,
+.vinyl-description-text, /* Füge diese Klasse hinzu, falls sie nicht schon abgedeckt ist */
+.contact-description,
+.video-description,
+.stat-label { /* Füge weitere Klassen hinzu, die diesen Stil erhalten sollen */
+  font-family: 'Poppins', sans-serif; /* Stellt sicher, dass Poppins verwendet wird */
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  line-height: 1.75;
+  color: #b0b0b0; /* Ein weicheres Grau für den Fließtext */
+  margin-bottom: 1.2rem;
+  /* opacity: 0; und transform: translateY(30px); werden hier entfernt, da GSAP diese Werte setzt */
+  will-change: transform, opacity;
+  /* Verbesserungen für die Schriftglättung (bereits im body, aber hier zur Sicherheit) */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 
 /* GSAP Visibility states (kept for JS-based animations) */
 @keyframes titleReveal { to { opacity: 1; transform: translateY(0) rotateX(0deg); } }
@@ -380,56 +417,6 @@ body::after {
 .fonts-loading .hero-title,
 .fonts-loading .section-title {
   opacity: 0.8;
-}
-
-/* ===== PERFORMANCE MEDIA QUERIES ===== */
-@media (max-width: 768px) {
-  /* Reduce animation complexity on mobile */
-  .page-section {
-    transform: none;
-  }
-  
-  .parallax-layer-back,
-  .parallax-layer-front {
-    transform: none;
-  }
-  
-  /* Simplify shadows on mobile */
-  .soft-shadow,
-  .hard-shadow {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-}
-
-/* ===== INTERACTION STATES ===== */
-.interactive-element {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  transform: translateZ(0);
-}
-
-.interactive-element:hover {
-  transform: translateY(-2px) translateZ(0);
-}
-
-.interactive-element:active {
-  transform: translateY(0) translateZ(0);
-}
-
-/* ===== REDUCED COMPLEXITY SHADOWS ===== */
-.soft-shadow {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.hard-shadow {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-/* ===== IMAGE OPTIMIZATION ===== */
-.optimized-image {
-  contain: layout style paint;
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
 /* ===== LOADING OPTIMIZATION ===== */
@@ -466,54 +453,52 @@ body::after {
   transform: translateY(0);
 }
 
-/* ===== OPTIMIZED ANIMATIONS ===== */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* ===== SCROLL INDICATOR OPTIMIZATION ===== */
-.scroll-down-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%) translateZ(0);
-  opacity: 0.7;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.scroll-down-indicator:hover {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-5px) translateZ(0);
-}
-
 /* ===== MUSIC SECTION ===== */
+/* ========================= */
+
+/* Die Sektion selbst, die als "Leinwand" dient */
 #my-music {
-  position: relative;
-  overflow: hidden;
-  background: transparent;
+    position: relative;
+    min-height: 150vh;
+    overflow: hidden;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Spezieller Hintergrund NUR für die Music Section */
-.spotify-players-container {
-  position: relative;
-  width: 100%;
-  min-height: 180vh; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Header innerhalb der Sektion */
+/* Header innerhalb der Sektion */
+#my-music .section-header {
+  position: relative; /* Oder static. Wichtig ist, dass es im normalen Fluss ist */
+  z-index: 20; /* WICHTIG: Muss ÜBER dem spotify-players-container liegen */
+  width: 100%; /* Beibehalten, damit der Text die volle Breite einnehmen kann und zentriert wird */
+  /* Lass top, left, right, margin-bottom für diesen Selektor weg, damit die Section selbst das Layout steuert */
+}
+
+/* Der Container für Planeten, Orbits und Hintergrund-Effekte */
+#my-music .spotify-players-container {
+  position: absolute; /* WIEDER ABSOLUT! */
+  top: 0;             /* Füllt die Section von oben aus */
+  left: 0;            /* Füllt die Section von links aus */
+  width: 100%;        /* Volle Breite der Section */
+  height: 100%;       /* Volle Höhe der Section */
+
+  display: flex;       /* Für interne Zentrierung der Planeten */
+  justify-content: center; /* Zentriert horizontal */
+  align-items: center;     /* Zentriert vertikal */
+
   margin: 0;
   padding: 0;
-  overflow: visible; 
-  /* Der einzigartige Hintergrund für diese Sektion */
+  overflow: hidden;    /* Wichtig, damit die Sterne/Nebel nicht überlaufen */
+  min-height: unset;   /* Keine feste Mindesthöhe hier */
+  aspect-ratio: unset; /* Kein festes Aspect Ratio hier */
+  z-index: 1;          /* WICHTIG: Muss UNTER dem Header liegen */
   background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 50%, #000000 100%);
 }
 
-/* Spezieller Sterne-Hintergrund für den Player-Container */
+/* Die spezifischen Sterne- und Nebel-Pseudo-Elemente können HIER bleiben,
+   wenn sie auf spotify-players-container angewendet werden sollen. */
 .spotify-players-container::before {
   content: '';
   position: absolute;
@@ -521,7 +506,7 @@ body::after {
   left: 0;
   width: 200%;
   height: 200%;
-  background-image: 
+  background-image:
     radial-gradient(2px 2px at 20% 30%, white, transparent),
     radial-gradient(2px 2px at 60% 70%, white, transparent),
     radial-gradient(1px 1px at 50% 50%, white, transparent),
@@ -532,10 +517,9 @@ body::after {
   background-position: 0 0, 40px 60px, 130px 270px, 70px 100px, 150px 50px, 100px 150px;
   animation: starsMove 200s linear infinite;
   opacity: 0.8;
-  z-index: 1;
+  z-index: 1; /* Muss niedriger sein als die Planeten selbst */
 }
 
-/* Spezieller Nebel-Effekt für den Player-Container */
 .spotify-players-container::after {
   content: '';
   position: absolute;
@@ -543,153 +527,84 @@ body::after {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: 
+  background:
     radial-gradient(ellipse at center, transparent 0%, rgba(147, 51, 234, 0.1) 40%, transparent 70%),
     radial-gradient(ellipse at 20% 80%, transparent 0%, rgba(59, 130, 246, 0.1) 40%, transparent 70%),
     radial-gradient(ellipse at 80% 20%, transparent 0%, rgba(236, 72, 153, 0.1) 40%, transparent 70%);
   animation: nebulaRotate 60s ease-in-out infinite;
   filter: blur(40px);
-  z-index: 2;
+  z-index: 2; /* Muss niedriger sein als die Planeten selbst */
 }
 
-.spotify-players-container {
+/* Basis-Styling für jeden Player/Planet */
+.spotify-player {
+  position: absolute !important;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  /* WICHTIG: Definiert den Drehpunkt für die JS-Animation */
+  transform-origin: center center;
+}
+
+/* Styling für die Sonne (zentraler Player) */
+.spotify-player:nth-child(1) {
+  z-index: 20;
+  /* Zentriert die Sonne korrekt, wird nicht von JS bewegt */
+  transform: translate(-50%, -50%);
+}
+
+.spotify-player:nth-child(1) .player-disc {
+  width: 200px;
+  height: 200px;
+  box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 165, 0, 0.4), 0 0 180px rgba(255, 69, 0, 0.2), inset 0 0 60px rgba(255, 215, 0, 0.3);
+  animation: sunPulse 4s ease-in-out infinite;
+}
+
+@keyframes sunPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 60px rgba(255, 215, 0, 0.6),
+      0 0 120px rgba(255, 165, 0, 0.4),
+      0 0 180px rgba(255, 69, 0, 0.2),
+      inset 0 0 60px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow:
+      0 0 80px rgba(255, 215, 0, 0.8),
+      0 0 160px rgba(255, 165, 0, 0.6),
+      0 0 240px rgba(255, 69, 0, 0.3),
+      inset 0 0 80px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* Allgemeines Disc-Styling */
+.player-disc {
   position: relative;
-  width: 100%;
-  min-height: 80vh; 
-  aspect-ratio: 16 / 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; 
-}
-
-.spotify-player { position: absolute !important; z-index: 10; }
-.spotify-player:nth-child(1) { top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; z-index: 20; }
-.spotify-player:nth-child(1) .player-disc { width: 200px; height: 200px; box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 165, 0, 0.4), 0 0 180px rgba(255, 69, 0, 0.2), inset 0 0 60px rgba(255, 215, 0, 0.3); animation: sunPulse 4s ease-in-out infinite; }
-@keyframes sunPulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 165, 0, 0.4), 0 0 180px rgba(255, 69, 0, 0.2), inset 0 0 60px rgba(255, 215, 0, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(255, 215, 0, 0.8), 0 0 160px rgba(255, 165, 0, 0.6), 0 0 240px rgba(255, 69, 0, 0.3), inset 0 0 80px rgba(255, 215, 0, 0.4); } }
-.spotify-player:nth-child(2) { top: 50% !important; left: 50% !important; animation: orbit1 20s linear infinite; }
-@keyframes orbit1 { from { transform: rotate(0deg) translateX(200px) rotate(0deg); } to { transform: rotate(360deg) translateX(200px) rotate(-360deg); } }
-.spotify-player:nth-child(3) { top: 50% !important; left: 50% !important; animation: orbit2 25s linear infinite -5s; }
-@keyframes orbit2 { from { transform: rotate(60deg) translateX(280px) rotate(-60deg); } to { transform: rotate(420deg) translateX(280px) rotate(-420deg); } }
-.spotify-player:nth-child(4) { top: 50% !important; left: 50% !important; animation: orbit3 30s linear infinite -10s; }
-@keyframes orbit3 { from { transform: rotate(120deg) translateX(360px) rotate(-120deg); } to { transform: rotate(480deg) translateX(360px) rotate(-480deg); } }
-.spotify-player:nth-child(5) { top: 50% !important; left: 50% !important; animation: orbit4 35s linear infinite -15s; }
-@keyframes orbit4 { from { transform: rotate(180deg) translateX(440px) rotate(-180deg); } to { transform: rotate(540deg) translateX(440px) rotate(-540deg); } }
-.spotify-player:nth-child(6) { top: 50% !important; left: 50% !important; animation: orbit5 40s linear infinite -20s; }
-@keyframes orbit5 { from { transform: rotate(240deg) translateX(520px) rotate(-240deg); } to { transform: rotate(600deg) translateX(520px) rotate(-600deg); } }
-.player-disc { position: relative; width: 160px; height: 160px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(147, 51, 234, 0.3), inset 0 0 20px rgba(147, 51, 234, 0.2); overflow: hidden; flex-shrink: 0; min-width: 160px; min-height: 160px; background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1), transparent); }
-.spotify-player:nth-child(2) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.4), inset 0 0 20px rgba(59, 130, 246, 0.3); background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1), transparent); }
-.spotify-player:nth-child(3) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(236, 72, 153, 0.4), inset 0 0 20px rgba(236, 72, 153, 0.3); background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.1), transparent); }
-.spotify-player:nth-child(4) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(34, 211, 238, 0.4), inset 0 0 20px rgba(34, 211, 238, 0.3); background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.1), transparent); }
-.spotify-player:nth-child(5) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(251, 146, 60, 0.4), inset 0 0 20px rgba(251, 146, 60, 0.3); background: radial-gradient(ellipse at center, rgba(251, 146, 60, 0.1), transparent); }
-.spotify-player:nth-child(6) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(250, 204, 21, 0.4), inset 0 0 20px rgba(250, 204, 21, 0.3); background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.1), transparent); }
-.player-disc:hover { transform: scale(1.1); filter: brightness(1.3); }
-.album-cover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; opacity: 0.9; transition: all 0.4s ease; }
-.player-disc:hover .album-cover { transform: scale(1.05); filter: brightness(1.2); opacity: 1; }
-.play-button { position: relative; z-index: 3; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.8) !important; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); border: 2px solid rgba(255, 255, 255, 0.3) !important; backdrop-filter: blur(10px); }
-.play-button:hover { background: rgba(0, 0, 0, 0.9) !important; transform: scale(1.1); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8); border-color: rgba(255, 255, 255, 0.6) !important; }
-.play-button svg { width: 20px; height: 20px; fill: white; margin-left: 2px; }
-.pause-icon { display: flex; gap: 3px; align-items: center; justify-content: center; }
-.pause-bar { width: 3px; height: 16px; background: white; border-radius: 1px; }
-.spotify-link { position: absolute; top: 10px; right: 10px; z-index: 4; width: 24px; height: 24px; color: #1DB954; opacity: 0.7; transition: all 0.3s ease; background: rgba(0, 0, 0, 0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-.spotify-link:hover { opacity: 1; transform: scale(1.2); background: rgba(0, 0, 0, 0.8); }
-.spotify-link svg { width: 14px; height: 14px; }
-.track-info { position: absolute; bottom: -80px; left: 50%; background: rgba(0, 0, 0, 0.9); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 12px 16px; text-align: center; width: 200px; opacity: 0; visibility: hidden; transform: translateX(-50%) translateY(10px); transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 100; backdrop-filter: blur(10px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 20px currentColor; }
-.spotify-player:hover .track-info { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-.track-info::before { content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 6px solid rgba(0, 0, 0, 0.9); }
-.track-title { font-size: 0.9rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.track-artist { color: #bebebe; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 0; }
-@keyframes shootingStar { 0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; } 100% { transform: translateX(300px) translateY(300px) rotate(-45deg); opacity: 0; } }
-.shooting-star { position: absolute; width: 100px; height: 2px; background: linear-gradient(to right, transparent, white, transparent); animation: shootingStar 3s linear infinite; z-index: 5; }
-.spotify-players-container .shooting-star:nth-of-type(1) { top: 10%; left: 10%; animation-delay: 0s; }
-.spotify-players-container .shooting-star:nth-of-type(2) { top: 30%; left: 80%; animation-delay: 1.5s; animation-duration: 4s; }
-.spotify-players-container .shooting-star:nth-of-type(3) { top: 60%; left: 20%; animation-delay: 3s; animation-duration: 2.5s; }
-
-/* ===== ABOUT SECTION (#ueber-mich) ===== */
-#ueber-mich .particle-container {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-#ueber-mich .particle {
-  position: absolute;
-  width: 2px; height: 2px;
-  background: rgba(64, 224, 208, 0.6);
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(64, 224, 208, 0.4);
-  animation-name: ueberMichParticleFloat;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-@keyframes ueberMichParticleFloat { 0% { transform: translateY(100vh) scale(0.3) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1) rotate(360deg); opacity: 0; } }
-
-.bio-content { display: grid; grid-template-columns: 1fr; gap: 2.5rem; max-width: 900px; width: 100%; align-items: center; position: relative; z-index: 2; }
-@media (min-width: 768px) { .bio-content { grid-template-columns: 0.8fr 1.2fr; align-items: start; gap: 3rem; } .bio-image-wrapper { order: -1; } }
-.bio-text { text-align: left; }
-.bio-paragraph { font-size: clamp(0.95rem, 1.5vw, 1.05rem); line-height: 1.75; color: #b0b0b0; margin-bottom: 1.2rem; opacity: 0; transform: translateY(30px); will-change: transform, opacity; }
-
-
-/* GSAP Visibility states (kept for JS-based animations) */
-@keyframes titleReveal { to { opacity: 1; transform: translateY(0) rotateX(0deg); } }
-@keyframes underlineExpand { to { opacity: 1; transform: scaleX(1); } }
-@keyframes imageReveal { to { opacity: 1; transform: translateY(0) rotateX(0deg) scale(1); } }
-
-
-/* ===== SCROLL INDICATOR ===== */
-.scroll-down-indicator { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; z-index: 3; text-decoration: none; color: rgba(255, 255, 255, 0.7); }
-.scroll-wheel { width: 22px; height: 38px; border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 20px; position: relative; display: flex; justify-content: center; padding-top: 7px; }
-.scroll-dot { width: 3px; height: 7px; background: rgba(255, 255, 255, 0.7); border-radius: 2px; }
-.scroll-text { font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; }
-.scroll-down-indicator:hover { color: #ff4757; transform: translateX(-50%) translateY(-5px); }
-.scroll-down-indicator:hover .scroll-wheel { border-color: rgba(255, 71, 87, 0.7); }
-.scroll-down-indicator:hover .scroll-dot { background: rgba(255, 71, 87, 0.9); }
-@keyframes scrollDot { 0% { opacity: 0; transform: translateY(0); } 50% { opacity: 1; transform: translateY(12px); } 100% { opacity: 0; transform: translateY(20px); } }
-
-
-/* ===== MUSIC SECTION ===== */
-#my-music {
-  position: relative;
-  overflow: visible;
-  background: transparent;
-}
-
-.spotify-players-container {
-  position: relative;
-  width: 100%;
-  min-height: 80vh; 
-  aspect-ratio: 16 / 10;
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; 
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(147, 51, 234, 0.3), inset 0 0 20px rgba(147, 51, 234, 0.2);
+  overflow: hidden;
+  flex-shrink: 0;
+  min-width: 160px;
+  min-height: 160px;
+  background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1), transparent);
 }
 
-.spotify-player { position: absolute !important; z-index: 10; }
-.spotify-player:nth-child(1) { top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; z-index: 20; }
-.spotify-player:nth-child(1) .player-disc { width: 200px; height: 200px; box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 165, 0, 0.4), 0 0 180px rgba(255, 69, 0, 0.2), inset 0 0 60px rgba(255, 215, 0, 0.3); animation: sunPulse 4s ease-in-out infinite; }
-@keyframes sunPulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 165, 0, 0.4), 0 0 180px rgba(255, 69, 0, 0.2), inset 0 0 60px rgba(255, 215, 0, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(255, 215, 0, 0.8), 0 0 160px rgba(255, 165, 0, 0.6), 0 0 240px rgba(255, 69, 0, 0.3), inset 0 0 80px rgba(255, 215, 0, 0.4); } }
-.spotify-player:nth-child(2) { top: 50% !important; left: 50% !important; animation: orbit1 20s linear infinite; }
-@keyframes orbit1 { from { transform: rotate(0deg) translateX(200px) rotate(0deg); } to { transform: rotate(360deg) translateX(200px) rotate(-360deg); } }
-.spotify-player:nth-child(3) { top: 50% !important; left: 50% !important; animation: orbit2 25s linear infinite -5s; }
-@keyframes orbit2 { from { transform: rotate(60deg) translateX(280px) rotate(-60deg); } to { transform: rotate(420deg) translateX(280px) rotate(-420deg); } }
-.spotify-player:nth-child(4) { top: 50% !important; left: 50% !important; animation: orbit3 30s linear infinite -10s; }
-@keyframes orbit3 { from { transform: rotate(120deg) translateX(360px) rotate(-120deg); } to { transform: rotate(480deg) translateX(360px) rotate(-480deg); } }
-.spotify-player:nth-child(5) { top: 50% !important; left: 50% !important; animation: orbit4 35s linear infinite -15s; }
-@keyframes orbit4 { from { transform: rotate(180deg) translateX(440px) rotate(-180deg); } to { transform: rotate(540deg) translateX(440px) rotate(-540deg); } }
-.spotify-player:nth-child(6) { top: 50% !important; left: 50% !important; animation: orbit5 40s linear infinite -20s; }
-@keyframes orbit5 { from { transform: rotate(240deg) translateX(520px) rotate(-240deg); } to { transform: rotate(600deg) translateX(520px) rotate(-600deg); } }
-.player-disc { position: relative; width: 160px; height: 160px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(147, 51, 234, 0.3), inset 0 0 20px rgba(147, 51, 234, 0.2); overflow: hidden; flex-shrink: 0; min-width: 160px; min-height: 160px; background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1), transparent); }
+/* Farb-Varianten für die Planeten */
 .spotify-player:nth-child(2) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.4), inset 0 0 20px rgba(59, 130, 246, 0.3); background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1), transparent); }
 .spotify-player:nth-child(3) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(236, 72, 153, 0.4), inset 0 0 20px rgba(236, 72, 153, 0.3); background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.1), transparent); }
 .spotify-player:nth-child(4) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(34, 211, 238, 0.4), inset 0 0 20px rgba(34, 211, 238, 0.3); background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.1), transparent); }
 .spotify-player:nth-child(5) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(251, 146, 60, 0.4), inset 0 0 20px rgba(251, 146, 60, 0.3); background: radial-gradient(ellipse at center, rgba(251, 146, 60, 0.1), transparent); }
 .spotify-player:nth-child(6) .player-disc { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(250, 204, 21, 0.4), inset 0 0 20px rgba(250, 204, 21, 0.3); background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.1), transparent); }
+
 .player-disc:hover { transform: scale(1.1); filter: brightness(1.3); }
 .album-cover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; opacity: 0.9; transition: all 0.4s ease; }
 .player-disc:hover .album-cover { transform: scale(1.05); filter: brightness(1.2); opacity: 1; }
@@ -706,11 +621,31 @@ body::after {
 .track-info::before { content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 6px solid rgba(0, 0, 0, 0.9); }
 .track-title { font-size: 0.9rem; font-weight: 600; color: #ffffff; margin-bottom: 0.25rem; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .track-artist { color: #bebebe; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 0; }
+
+/* CSS-basierte Sternschnuppen (können hier angepasst oder entfernt werden) */
 @keyframes shootingStar { 0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; } 100% { transform: translateX(300px) translateY(300px) rotate(-45deg); opacity: 0; } }
 .shooting-star { position: absolute; width: 100px; height: 2px; background: linear-gradient(to right, transparent, white, transparent); animation: shootingStar 3s linear infinite; z-index: 5; }
 .spotify-players-container .shooting-star:nth-of-type(1) { top: 10%; left: 10%; animation-delay: 0s; }
 .spotify-players-container .shooting-star:nth-of-type(2) { top: 30%; left: 80%; animation-delay: 1.5s; animation-duration: 4s; }
 .spotify-players-container .shooting-star:nth-of-type(3) { top: 60%; left: 20%; animation-delay: 3s; animation-duration: 2.5s; }
+
+/* Orbit-Linien */
+.orbit-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  pointer-events: none;
+}
+.orbit-line-1 { width: 400px; height: 400px; }
+.orbit-line-2 { width: 560px; height: 560px; }
+.orbit-line-3 { width: 720px; height: 720px; }
+.orbit-line-4 { width: 880px; height: 880px; }
+.orbit-line-5 { width: 1040px; height: 1040px; }
+
 
 /* ===== STATS, LISTS, VIDEO, CONTACT, GALLERY, FOOTER SECTIONS ===== */
 
@@ -824,6 +759,7 @@ body::after {
 
 
 /* ===== RESPONSIVE ===== */
+/* KORRIGIERTER RESPONSIVE BLOCK */
 @media (max-width: 768px) {
   .stats-grid { grid-template-columns: 1fr; gap: 2rem; }
   .spotify-item { margin-top: 0; }
@@ -843,17 +779,31 @@ body::after {
   .gallery-item, .gallery-item.featured { transform: none !important; opacity: 1 !important; }
   .modal-close { top: -40px; right: -40px; width: 35px; height: 35px; }
   .modal-close svg { width: 20px; height: 20px; }
-  .spotify-players-container { height: auto; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; padding: 1rem; }
-  .spotify-player { width: 140px; height: 140px; transform: none; }
-  .spotify-player .play-button { width: 50px; height: 50px; }
-  .spotify-player .play-button svg { width: 20px; height: 20px; }
-  .spotify-player .spotify-link { width: 25px; height: 25px; }
-  .spotify-player .spotify-link svg { width: 12px; height: 12px; }
-}
-
-@media (min-width: 769px) and (max-width: 1200px) {
-  .spotify-players-container { grid-template-columns: repeat(3, 1fr); }
-  .spotify-player { width: 160px; height: 160px; transform: none; }
+  
+  /* KORREKTUREN FÜR MUSIC SECTION */
+  #my-music .spotify-players-container {
+      padding: 1rem;
+      min-height: 100vh;
+  }
+  #my-music .spotify-player {
+      width: 120px;
+      height: 120px;
+  }
+  #my-music .spotify-player:nth-child(1) .player-disc {
+      width: 140px;
+      height: 140px;
+  }
+  /* Größen der untergeordneten Elemente auch anpassen */
+  #my-music .player-disc {
+      width: 120px;
+      height: 120px;
+      min-width: 120px;
+      min-height: 120px;
+  }
+  #my-music .spotify-player .play-button { width: 40px; height: 40px; }
+  #my-music .spotify-player .play-button svg { width: 16px; height: 16px; }
+  #my-music .spotify-player .spotify-link { width: 20px; height: 20px; }
+  #my-music .spotify-player .spotify-link svg { width: 10px; height: 10px; }
 }
 
 /* ===== GRADIENT LINK ===== */
@@ -866,62 +816,4 @@ footer {
   z-index: 10;
   position: relative;
   padding: 1.5rem 0;
-}
-
-/* ===== KORREKTUR FÜR MUSIC SECTION LAYOUT ===== */
-
-/* Wir positionieren den Header absolut, damit er schwebt */
-#my-music .section-header {
-  position: absolute;
-  top: 6rem; /* Abstand vom oberen Rand der Sektion */
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 20; /* Stellt sicher, dass der Header über den Planeten liegt */
-  margin-bottom: 0; /* Der alte Abstand wird nicht mehr benötigt */
-}
-
-/* Wir lassen den Planeten-Container den gesamten Raum der Sektion füllen */
-#my-music .spotify-players-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* Diese Zeilen überschreiben die alten Grössen-Angaben */
-  min-height: unset;
-  aspect-ratio: unset;
-}
-
-/* Wir geben der #my-music Sektion selbst eine definierte Höhe */
-#my-music {
-    min-height: 150vh; /* Erhöht die Gesamtlänge, damit die Planeten mehr Platz haben */
-    overflow: hidden; /* Setzen wir hier wieder auf hidden, damit Planeten nicht in andere Sektionen ragen */
-}
-
-/* ===== SPEZIAL-EFFEKT FÜR MUSIC-SECTION SONNE ===== */
-
-/* Diese Klasse weisen wir gleich dem zentralen Player zu */
-.is-sun {
-  animation: sunPulse 4s ease-in-out infinite;
-}
-
-/* Die Keyframe-Animation, die das Leuchten steuert */
-@keyframes sunPulse {
-  0%, 100% { 
-    transform: scale(1);
-    box-shadow: 
-      0 0 60px rgba(255, 215, 0, 0.6),
-      0 0 120px rgba(255, 165, 0, 0.4),
-      0 0 180px rgba(255, 69, 0, 0.2),
-      inset 0 0 60px rgba(255, 215, 0, 0.3);
-  }
-  50% { 
-    transform: scale(1.05);
-    box-shadow: 
-      0 0 80px rgba(255, 215, 0, 0.8),
-      0 0 160px rgba(255, 165, 0, 0.6),
-      0 0 240px rgba(255, 69, 0, 0.3),
-      inset 0 0 80px rgba(255, 215, 0, 0.4);
-  }
 }

@@ -1,12 +1,20 @@
+// src/app/components/VinylCollectionSection.tsx
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 export default function VinylCollectionSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  
+  const [isVisible, setIsVisible] = useState(false) 
   
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -57,9 +65,51 @@ export default function VinylCollectionSection() {
     
     window.addEventListener('mousemove', handleMouseMove)
 
+    // Eigene GSAP-Animation für den beschreibenden Text HINZUFÜGEN
+    const descriptionText = sectionRef.current?.querySelector('.vinyl-description-text');
+    if (descriptionText) {
+      gsap.fromTo(descriptionText,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: descriptionText,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          }
+        }
+      );
+    }
+    const innerSpan = sectionRef.current?.querySelector('.vinyl-description-text span');
+    if (innerSpan) {
+      gsap.fromTo(innerSpan,
+        { opacity: 0 },
+        {
+          opacity: 0.8,
+          duration: 1,
+          delay: 0.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: innerSpan,
+            start: "top 95%",
+            toggleActions: "play none none reverse",
+          }
+        }
+      );
+    }
+
     return () => {
       if (currentSectionRef) observer.unobserve(currentSectionRef)
       window.removeEventListener('mousemove', handleMouseMove)
+      // Wichtig: Auch die ScrollTriggers für den Beschreibungstext killen
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === descriptionText || trigger.trigger === innerSpan) {
+          trigger.kill();
+        }
+      });
     }
   }, [mouseX, mouseY]) 
 
@@ -75,7 +125,7 @@ export default function VinylCollectionSection() {
   }
 
   return (
-    <section 
+    <section
       ref={sectionRef}
       className="vinyl-collection-section page-section"
       style={{
@@ -85,9 +135,10 @@ export default function VinylCollectionSection() {
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '4rem 2rem'
+        justifyContent: 'flex-start', // Wichtig: Inhalt oben starten
+        alignItems: 'center',        // Behält die horizontale Zentrierung bei
+        padding: '4rem 2rem',
+        paddingTop: '6rem', // Fügt oben etwas mehr Polsterung hinzu, damit die Überschrift nicht am Rand klebt
       }}
     >
       <motion.div 
@@ -104,19 +155,14 @@ export default function VinylCollectionSection() {
         ))}
       </motion.div>
 
-      <motion.div
-        className="section-header"
-        initial={{ opacity: 0, y: -50 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-        style={{ zIndex: 10, marginBottom: '3rem' }}
-      >
+      <div className="section-header">
         <h2 className="section-title">
           <span className="title-line">
             Vinyl Cosmos
           </span>
         </h2>
-      </motion.div>
+        <div className="title-underline"></div> 
+      </div>
 
       <motion.div 
         className="vinyl-spiral-container"
@@ -142,23 +188,15 @@ export default function VinylCollectionSection() {
             </motion.div>
           )
         })}
-        {/* Zentraler Energie-Kern und Partikel bleiben unverändert... */}
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 1, delay: 1.5 }}
-        style={{ textAlign: 'center', marginTop: '4rem', zIndex: 10, position: 'relative' }}
-      >
-        <p style={{ fontSize: '1.4rem', color: '#FFFFFF', maxWidth: '700px', lineHeight: '1.8', margin: '0 auto', fontWeight: 300, letterSpacing: '0.05em', textShadow: '0 2px 20px rgba(255, 255, 255, 0.3)' }}>
-          Jedes Vinyl erzählt eine Geschichte, jeder Beat erschafft eine Erinnerung.
-          <br />
-          <motion.span style={{ opacity: 0 }} animate={isVisible ? { opacity: 0.8 } : {}} transition={{ delay: 2.5 }}>
-            Das ist meine musikalische Reise durch Klang und Rhythmus.
-          </motion.span>
-        </p>
-      </motion.div>
+      <p className="vinyl-description-text" style={{ textAlign: 'center', marginTop: '4rem', zIndex: 10, position: 'relative', fontSize: '1.4rem', color: '#FFFFFF', maxWidth: '700px', lineHeight: '1.8', margin: '0 auto', fontWeight: 300, letterSpacing: '0.05em', textShadow: '0 2px 20px rgba(255, 255, 255, 0.3)' }}>
+        Jedes Vinyl erzählt eine Geschichte, jeder Beat erschafft eine Erinnerung.
+        <br />
+        <span>
+          Das ist meine musikalische Reise durch Klang und Rhythmus.
+        </span>
+      </p>
     </section>
   )
 }

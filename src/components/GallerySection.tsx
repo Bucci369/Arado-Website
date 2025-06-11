@@ -1,8 +1,15 @@
+// src/app/components/GallerySection.tsx
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface GalleryImage {
   src: string
@@ -13,7 +20,6 @@ interface GalleryImage {
   objectPosition?: string
 }
 
-// Optimized Image Component with Lazy Loading
 const LazyGalleryImage = ({ 
   image, 
   index, 
@@ -116,6 +122,9 @@ const LazyGalleryImage = ({
 }
 
 export default function OptimizedGallerySection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  
+
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   
   const images: GalleryImage[] = [
@@ -155,20 +164,18 @@ export default function OptimizedGallerySection() {
 
   return (
     <>
-      <section className="min-h-screen py-20 px-8">
-        <motion.div 
-          className="section-header"
-          initial={{ opacity: 0, y: -30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+      <section 
+        ref={sectionRef} 
+        className="min-h-screen py-20 px-8"
+      >
+        {/* Hier motion.div um den section-header entfernt */}
+        <div className="section-header"> 
           <h2 className="section-title">
             <span className="title-line">Visual</span>
             <span className="title-line">Journey</span>
           </h2>
           <div className="title-underline" />
-        </motion.div>
+        </div>
 
         <div className="gallery-container max-w-7xl mx-auto">
           <div className="gallery-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[200px]">
@@ -184,7 +191,6 @@ export default function OptimizedGallerySection() {
         </div>
       </section>
 
-      {/* Optimized Modal */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div

@@ -1,9 +1,19 @@
+// src/app/components/ContactSection.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import MagneticButton from './MagneticButton'
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 export default function ContactSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,6 +35,7 @@ export default function ContactSection() {
 
   return (
     <section 
+      ref={sectionRef} 
       id="contact" 
       className="page-section section-is-white new-style-section"
       style={{
@@ -41,13 +52,13 @@ export default function ContactSection() {
       </div>
 
       <div className="contact-container">
+        {/* contact-info und contact-form können weiterhin eigene Animationen haben, wenn gewünscht */}
         <div className="contact-grid">
-          {/* Contact Info */}
           <div className="contact-info">
             <div className="contact-intro">
-              <h3 className="contact-subtitle">Let&apos;s Make Music</h3>
+              <h3 className="contact-subtitle">Let's Make Music</h3>
               <p className="contact-description">
-                Ready for unforgettable nights? Let&apos;s talk about your next event.
+                Ready for unforgettable nights? Let's talk about your next event.
               </p>
             </div>
 

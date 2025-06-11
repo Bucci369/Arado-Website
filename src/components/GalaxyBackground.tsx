@@ -18,11 +18,11 @@ function ShootingStar({ delay = 0 }) {
   useFrame((state) => {
     if (!meshRef.current) return
 
-    const time = (state.clock.elapsedTime + delay) % 8
-    const progress = time / 8
+    const time = (state.clock.elapsedTime + delay) % 20
+    const progress = time / 20
 
-    if (progress < 0.3) {
-      const activeProgress = progress / 0.3
+    if (progress < 0.1) {
+      const activeProgress = progress / 0.1
       meshRef.current.position.x = startPos.x - activeProgress * 150
       meshRef.current.position.y = startPos.y - activeProgress * 100
       meshRef.current.position.z = startPos.z
