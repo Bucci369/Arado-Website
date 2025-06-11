@@ -4,7 +4,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
-export default function GlobalStars({ count = 5 }) { // <--- Reduziere die Standardanzahl drastisch, z.B. auf 5
+export default function GlobalStars({ count = 5 }) { // Die Anzahl der Sterne kannst du bei Bedarf anpassen
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,19 +32,35 @@ export default function GlobalStars({ count = 5 }) { // <--- Reduziere die Stand
       starContainer.appendChild(star);
 
       const setupStarAnimation = () => {
-        const startX = window.innerWidth * (1 + Math.random() * 0.5);
-        const startY = window.innerHeight * (-0.5 - Math.random() * 0.5);
-        const endX = window.innerWidth * (-0.5 - Math.random() * 0.5);
-        const endY = window.innerHeight * (1 + Math.random() * 0.5);
-        const duration = 4 + Math.random() * 4; // <--- Erhöhe die Dauer (4s bis 8s), damit sie langsamer sind
-        const initialDelay = Math.random() * 15; // <--- Erhöhe die Verzögerung (0s bis 15s), damit sie seltener starten
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Startposition: Zufällig von außerhalb des oberen oder rechten Randes
+        // Sie sollen von oben rechts kommen, also:
+        // x: von einem beliebigen Punkt im sichtbaren Bereich (oder leicht rechts davon) bis doppelte Breite
+        // y: von einem beliebigen Punkt im sichtbaren Bereich (oder leicht oberhalb davon) bis zur doppelten Höhe
+        const startX = (Math.random() * 2 - 0.5) * viewportWidth; // Startet zwischen -0.5*Width und 1.5*Width (deckt den gesamten horizontalen Bereich oben/rechts ab)
+        const startY = (Math.random() * 2 - 0.5) * viewportHeight; // Startet zwischen -0.5*Height und 1.5*Height (deckt den gesamten vertikalen Bereich oben/rechts ab)
+
+        // Endposition: Nach unten links bewegen, also:
+        // x: deutlich in den negativen Bereich (links außerhalb des Bildschirms)
+        // y: deutlich über den sichtbaren Bereich hinaus (unten außerhalb des Bildschirms)
+        const endX = startX - (Math.random() * 0.5 + 1) * viewportWidth; // Geht nach links, mindestens eine Bildschirmbreite weit
+        const endY = startY + (Math.random() * 0.5 + 1) * viewportHeight; // Geht nach unten, mindestens eine Bildschirmhöhe weit
+
+
+        const duration = 4 + Math.random() * 4; // Dauer der Animation (4s bis 8s), damit sie langsamer sind
+        const initialDelay = Math.random() * 15; // Verzögerung (0s bis 15s), damit sie seltener starten
+
+        // Berechne die Rotation, damit der Stern in Bewegungsrichtung zeigt
+        const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
 
         gsap.set(star, {
           x: startX,
           y: startY,
           opacity: 0,
-          rotation: -45,
-          scale: 0.5,
+          rotation: angle, // Setze die Rotation basierend auf der Bewegungsrichtung
+          scale: 0.5, // Beibehalten der ursprünglichen Skalierung
           filter: 'blur(1px)'
         });
 
@@ -53,7 +69,7 @@ export default function GlobalStars({ count = 5 }) { // <--- Reduziere die Stand
           y: endY,
           opacity: 0.3,
           duration: duration,
-          ease: 'none',
+          ease: 'none', // Beibehalten der ursprünglichen Ease-Funktion
           delay: initialDelay,
           onComplete: () => {
             gsap.to(star, {
