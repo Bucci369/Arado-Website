@@ -3,16 +3,12 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { gsap } from 'gsap'
-// Importiere die Hook und die benötigten GSAP-Module für die Hook
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-
-// Registriere GSAP Plugins einmalig im globalen Kontext
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger); // Stelle sicher, dass ScrollTrigger registriert ist
+  gsap.registerPlugin(ScrollTrigger);
 }
 
-// Interface für die Track-Daten
 interface SpotifyTrack {
   id: string
   name: string
@@ -42,14 +38,8 @@ export default function MusicSection() {
   const [loading, setLoading] = useState(true)
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([])
   
-  // Hinzufügen des sectionRef für die Sektion selbst
   const sectionRef = useRef<HTMLElement>(null) 
-  // Hinzufügen des wrapperRef für den Planeten-Wrapper
   const wrapperRef = useRef<HTMLDivElement>(null)
-
-  
-  // fetchSpotifyTracks, getStoredAradoTracks, storeAradoTracks, getFallbackTracks
-  // bleiben unverändert, da sie die Funktionalität der Sektion betreffen
 
   const getStoredAradoTracks = (): SpotifyTrack[] => {
     try {
@@ -125,7 +115,6 @@ export default function MusicSection() {
     fetchSpotifyTracks()
   }, [fetchSpotifyTracks])
 
-  // GSAP-Effekt für die koordinierte Planetenbewegung (unverändert beibehalten)
   useEffect(() => {
    if (!loading && wrapperRef.current) {
       const container = wrapperRef.current;
@@ -218,23 +207,41 @@ export default function MusicSection() {
 
   if (loading) {
     return (
-      <section id="my-music" className="page-section section-is-white new-style-section" style={{ background: '#000000', position: 'relative' }}>
+      <section id="my-music" className="page-section section-is-white new-style-section" style={{ background: 'transparent', position: 'relative', minHeight: '100vh', padding: '4rem 2rem' }}>
         <div className="section-header">
           <h2 className="section-title"><span className="title-line">My</span><span className="title-line">Music</span></h2>
           <div className="title-underline"></div>
         </div>
-        <div className="loading-spinner" style={{ color: '#ffffff' }}><div className="spinner"></div><p>Loading tracks...</p></div>
+        <div className="loading-spinner" style={{ color: '#ffffff', marginTop: '4rem' }}><div className="spinner"></div><p>Loading tracks...</p></div>
       </section>
     )
   }
 
   return (
-    <section ref={sectionRef} id="my-music" className="page-section section-is-white new-style-section" style={{ background: '#000000', position: 'relative' }}>
-      <div className="section-header">
-        <h2 className="section-title"><span className="title-line">Sounds</span><span className="title-line">From Outer World</span></h2>
+    <section 
+      ref={sectionRef} 
+      id="my-music" 
+      className="page-section section-is-white new-style-section" 
+      style={{ 
+        background: 'transparent', 
+        position: 'relative',
+        minHeight: '150vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '4rem 2rem',
+        paddingTop: '6rem'
+      }}
+    >
+      <div className="section-header" style={{ marginBottom: '4rem' }}>
+        <h2 className="section-title">
+          <span className="title-line">Sounds</span>
+          <span className="title-line">From Outer World</span>
+        </h2>
         <div className="title-underline"></div>
       </div>
-      <div className="spotify-players-container">
+      
+      <div className="spotify-players-container" style={{ flex: 1, width: '100%', position: 'relative', marginTop: '2rem' }}>
         <div className="orbit-line orbit-line-1"></div>
         <div className="orbit-line orbit-line-2"></div>
         <div className="orbit-line orbit-line-3"></div>
