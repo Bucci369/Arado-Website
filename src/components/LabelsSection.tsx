@@ -1,7 +1,7 @@
 // src/app/components/LabelsSection.tsx
 'use client'
 
-import { useRef, useEffect } from 'react' // useEffect hinzufügen, falls nicht vorhanden
+import { useRef } from 'react' // useEffect hinzufügen, falls nicht vorhanden
 import { gsap } from 'gsap' // Sicherstellen, dass GSAP hier auch importiert ist
 import { ScrollTrigger } from 'gsap/ScrollTrigger' // Sicherstellen, dass ScrollTrigger hier auch importiert ist
 

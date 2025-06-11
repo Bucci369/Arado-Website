@@ -1,7 +1,7 @@
 // src/app/components/ContactSection.tsx
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import MagneticButton from './MagneticButton'

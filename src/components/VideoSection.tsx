@@ -1,7 +1,7 @@
 // src/app/components/VideoSection.tsx
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Image from 'next/image'

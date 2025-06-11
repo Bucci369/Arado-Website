@@ -10,7 +10,7 @@ import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 import ScrollBackground from '@/components/ScrollBackground'
 import VinylCollectionSection from '@/components/VinylCollectionSection'
-import ParallaxController from '@/components/ParallaxController'
+
 
 
 export default function Home() {
