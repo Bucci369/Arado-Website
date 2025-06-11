@@ -1,3 +1,4 @@
+// src/app/components/BiographySection.tsx
 'use client'
 
 import { useEffect, useRef } from 'react'
@@ -5,7 +6,6 @@ import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Register GSAP plugin
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
@@ -40,10 +40,14 @@ export default function BiographySection() {
 
           // Partikel initialisieren
           if (entry.intersectionRatio >= 0.5 && particleContainer && !particleContainer.dataset.initialized) {
+            // AKTION: Verzögerung für Partikel auf Mobilgeräten reduzieren oder entfernen
+            const isMobile = window.innerWidth <= 768; // Beispiel-Breakpoint
+            const particleDelay = isMobile ? 100 : 200; // Kürzere Verzögerung auf Mobilgeräten
+
             setTimeout(() => {
-              initUeberMichParticles(particleContainer)
+              initUeberMichParticles(particleContainer, isMobile); // isMobile übergeben
               particleContainer.dataset.initialized = 'true'
-            }, 200)
+            }, particleDelay)
           }
         }
       })
@@ -111,7 +115,11 @@ export default function BiographySection() {
     const parallaxIntensityImage = 10
     const liftAmountImage = 10
 
+    // AKTION: Parallax für Mobilgeräte deaktivieren oder reduzieren
+    const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
     const handleMouseMove = (e: Event) => {
+      if (isTouchDevice) return; // Auf Touch-Geräten deaktivieren
       const mouseEvent = e as MouseEvent;
       if (!section.classList.contains('is-visible')) return
       
@@ -129,6 +137,7 @@ export default function BiographySection() {
     }
 
     const handleMouseLeave = () => {
+      if (isTouchDevice) return; // Auf Touch-Geräten deaktivieren
       if (parallaxAnimationId) {
         cancelAnimationFrame(parallaxAnimationId)
         parallaxAnimationId = null
@@ -138,7 +147,7 @@ export default function BiographySection() {
     }
 
     // Mouse Parallax nur auf dem Bild selbst
-    if (bioImageWrapper) {
+    if (bioImageWrapper && !isTouchDevice) { // Nur hinzufügen, wenn es kein Touch-Gerät ist
       bioImageWrapper.addEventListener('mousemove', handleMouseMove)
       bioImageWrapper.addEventListener('mouseleave', handleMouseLeave)
     }
@@ -147,22 +156,29 @@ export default function BiographySection() {
     return () => {
       observer.disconnect()
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
-      if (bioImageWrapper) {
+      if (bioImageWrapper && !isTouchDevice) { // Nur entfernen, wenn es hinzugefügt wurde
         bioImageWrapper.removeEventListener('mousemove', handleMouseMove)
         bioImageWrapper.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
     
     // Partikel-Funktion
-    const initUeberMichParticles = (container: HTMLDivElement) => {
-      createGenericParticles(container, 20, 'particle')
+    // AKTION: Parameter für Partikelanzahl/Größe basierend auf Mobilgeräten
+    const initUeberMichParticles = (container: HTMLDivElement, isMobile: boolean) => {
+      const particleCount = isMobile ? 10 : 20; // Weniger Partikel auf Mobilgeräten
+      const minSize = isMobile ? 1 : 2;
+      const maxSize = isMobile ? 2 : 3;
+      createGenericParticles(container, particleCount, 'particle', minSize, maxSize)
     }
   }, [])
 
+  // AKTION: Parameter für Partikelgröße hinzugefügt
   const createGenericParticles = (
     container: HTMLDivElement, 
     count: number, 
-    particleClass: string
+    particleClass: string,
+    minSize: number = 1, // Standardwerte, falls nicht übergeben
+    maxSize: number = 3
   ) => {
     const fragment = document.createDocumentFragment()
     const defaults = { 
@@ -170,8 +186,8 @@ export default function BiographySection() {
       maxDuration: 8, 
       minDelay: 0, 
       maxDelay: 3, 
-      minSize: 1, 
-      maxSize: 3 
+      minSize: minSize, // Nutze die übergebenen Werte
+      maxSize: maxSize  // Nutze die übergebenen Werte
     }
     
     for (let i = 0; i < count; i++) {
@@ -227,6 +243,7 @@ export default function BiographySection() {
         <div 
           ref={bioImageWrapperRef}
           className="bio-image-wrapper"
+          // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können, aber die CSS-Klassen definieren Basis
           style={{ 
             perspective: '800px',
             position: 'relative',
@@ -238,6 +255,7 @@ export default function BiographySection() {
         >
           <div 
             className="bio-image"
+            // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können
             style={{
               position: 'relative',
               borderRadius: '10px',
@@ -255,6 +273,7 @@ export default function BiographySection() {
               height={400}
               className="bio-image-img"
               priority
+              // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können
               style={{ 
                 width: '100%', 
                 height: 'auto', 
@@ -265,6 +284,7 @@ export default function BiographySection() {
             />
             <div 
               className="image-overlay"
+              // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können
               style={{
                 position: 'absolute',
                 top: 0,

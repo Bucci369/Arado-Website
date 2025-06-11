@@ -1,6 +1,7 @@
+// src/app/components/GallerySection.tsx
 'use client'
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react' // AKTION: useMemo hinzugefügt
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { gsap } from 'gsap'
@@ -125,7 +126,6 @@ export default function OptimizedGallerySection() {
   
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   
-  // AKTION: images Array mit useMemo umschließen
   const images: GalleryImage[] = useMemo(() => [
     { src: "/assets/images/image8.jpg", alt: "ARADO Profile", size: 'large', width: 800, height: 1200, objectPosition: 'center 20%' },
     { src: "/assets/images/image6.jpg", alt: "Studio Session", size: 'small', width: 1920, height: 1080, objectPosition: 'center top' },
@@ -134,12 +134,12 @@ export default function OptimizedGallerySection() {
     { src: "/assets/images/image5.jpg", alt: "Backstage", size: 'large', width: 1200, height: 800, objectPosition: 'center 30%' },
     { src: "/assets/images/image7.jpg", alt: "Live Performance", size: 'medium', width: 1920, height: 1280 },
     { src: "/assets/images/image4.jpg", alt: "Pacha Event", size: 'small', width: 900, height: 1600 },
-  ], []) // AKTION: Leeres Abhängigkeitsarray, da die Bilder statisch sind.
+  ], [])
 
   const openModal = useCallback((imageSrc: string) => {
     const image = images.find(img => img.src === imageSrc)
     if (image) setSelectedImage(image)
-  }, [images]) // AKTION: `images` als Abhängigkeit für `useCallback` hinzufügen
+  }, [images])
 
   const closeModal = useCallback(() => {
     setSelectedImage(null)
@@ -152,12 +152,16 @@ export default function OptimizedGallerySection() {
     
     if (selectedImage) {
       document.addEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'hidden'
+      if (typeof window !== 'undefined') {
+        document.body.style.overflow = 'hidden'
+      }
     }
     
     return () => {
       document.removeEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'unset'
+      if (typeof window !== 'undefined') {
+        document.body.style.overflow = 'unset'
+      }
     }
   }, [selectedImage, closeModal])
 
@@ -167,7 +171,6 @@ export default function OptimizedGallerySection() {
         ref={sectionRef} 
         className="min-h-screen py-20 px-8"
       >
-        {/* Hier motion.div um den section-header entfernt */}
         <div className="section-header"> 
           <h2 className="section-title">
             <span className="title-line">Visual</span>
@@ -193,39 +196,33 @@ export default function OptimizedGallerySection() {
       <AnimatePresence>
         {selectedImage && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+            className="gallery-modal" // Diese div ist das volle Overlay
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={closeModal}
+            onClick={closeModal} // Klick außerhalb des Bildes schließt Modal
           >
             <motion.div
-              className="relative max-w-[90vw] max-h-[90vh]"
+              className="modal-content" // Diese div ist der Container für das Bild und den Button
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: "spring", damping: 25 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()} // Klick auf den Inhalt schließt Modal NICHT
             >
               <Image
                 src={selectedImage.src}
                 alt={selectedImage.alt}
                 width={selectedImage.width}
                 height={selectedImage.height}
-                className="rounded-lg"
-                style={{ 
-                  maxWidth: '90vw', 
-                  maxHeight: '90vh', 
-                  width: 'auto', 
-                  height: 'auto' 
-                }}
+                className="modal-image" // Das tatsächliche Bild
                 priority
               />
               <motion.button
-                className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                className="modal-close" // HIER IST DER BUTTON!
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={closeModal}
+                onClick={closeModal} // Klick auf den Button schließt Modal
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
