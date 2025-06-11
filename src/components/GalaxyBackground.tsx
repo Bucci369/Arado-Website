@@ -5,7 +5,8 @@ import { Stars } from '@react-three/drei'
 import { useRef, useMemo } from 'react'
 import * as THREE from 'three'
 
-// Shooting Star Component
+// Shooting Star Component (Kann nach der Entfernung der Instanzen gelöscht werden,
+// wenn es nirgendwo anders verwendet wird)
 function ShootingStar({ delay = 0 }) {
   const meshRef = useRef<THREE.Mesh>(null)
 
@@ -42,25 +43,11 @@ function ShootingStar({ delay = 0 }) {
 }
 
 
-// Pulsating Star Component
-function PulsatingStar({ position, size, speed }: { position: [number, number, number]; size: number; speed: number }) {
-  const meshRef = useRef<THREE.Mesh>(null)
-    useFrame((state) => {
-    if (!meshRef.current) return
-    const scale = 1 + Math.sin(state.clock.elapsedTime * speed) * 0.3
-    meshRef.current.scale.setScalar(scale * size)
-  })
-  return (
-    <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[1, 8, 8]} />
-      <meshBasicMaterial color="#ffffff" />
-    </mesh>
-  )
-}
+
 
 // Main Galaxy Scene
 function GalaxyScene() {
-  const pulsatingStars = useMemo(() => 
+  const pulsatingStars = useMemo(() =>
     Array.from({ length: 15 }, () => ({
       position: [
         (Math.random() - 0.5) * 100,
@@ -75,47 +62,45 @@ function GalaxyScene() {
   return (
     <>
       <ambientLight intensity={0.1} />
-      
-      <Stars 
-        radius={80} 
-        depth={50} 
-        count={3000} 
-        factor={4} 
-        saturation={0} 
-        fade 
+
+      <Stars
+        radius={80}
+        depth={50}
+        count={3000}
+        factor={4}
+        saturation={0}
+        fade
         speed={0.5}
       />
-      <Stars 
-        radius={120} 
-        depth={80} 
-        count={2000} 
-        factor={2} 
-        saturation={0} 
-        fade 
+      <Stars
+        radius={120}
+        depth={80}
+        count={2000}
+        factor={2}
+        saturation={0}
+        fade
         speed={0.3}
       />
-      <Stars 
-        radius={150} 
-        depth={100} 
-        count={1000} 
-        factor={1} 
-        saturation={0} 
-        fade 
+      <Stars
+        radius={150}
+        depth={100}
+        count={1000}
+        factor={1}
+        saturation={0}
+        fade
         speed={0.1}
       />
+
+      {/* DIESE DREI ZEILEN WURDEN ENTFERNT: */}
+      {/* <ShootingStar delay={0} /> */}
+      {/* <ShootingStar delay={3} /> */}
+      {/* <ShootingStar delay={5.5} /> */}
+
       
-      
-      
-      <ShootingStar delay={0} />
-      <ShootingStar delay={3} />
-      <ShootingStar delay={5.5} />
-      
-      {pulsatingStars.map((star, i) => (
-        <PulsatingStar key={i} {...star} />
-      ))}
     </>
   )
 }
+
 export default function GalaxyBackground() {
   return (
     <div style={{
@@ -127,7 +112,7 @@ export default function GalaxyBackground() {
       zIndex: -1,
       background: 'radial-gradient(ellipse at center, #0a0a1f 0%, #000511 40%, #000000 100%)'
     }}>
-      <Canvas 
+      <Canvas
         camera={{ position: [0, 0, 1], fov: 75 }}
         dpr={[1, 2]} // Limit pixel ratio for performance
         performance={{ min: 0.5 }} // Performance optimization
