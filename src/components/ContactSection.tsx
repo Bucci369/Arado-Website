@@ -58,7 +58,7 @@ export default function ContactSection() {
             <div className="contact-intro">
               <h3 className="contact-subtitle">Lets Make Music</h3>
               <p className="contact-description">
-                Ready for unforgettable nights? Let's talk about your next event.
+                Ready for unforgettable nights? Lets talk about your next event.
               </p>
             </div>
 
