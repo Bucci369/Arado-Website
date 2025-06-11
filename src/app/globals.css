@@ -737,7 +737,7 @@ footer {
 }
 
 .shooting-star {
-  width: 70px; /* Die Länge der Sternschnuppe */
+  width: 40px; /* Die Länge der Sternschnuppe */
   height: 3px;
   background: linear-gradient(to right, transparent, white, transparent);
   /* Die folgenden Eigenschaften (position, animation, z-index, transform, opacity, filter)
