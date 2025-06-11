@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react' // AKTION: useMemo hinzugefügt
 
 export default function LandingSection() {
   const [isMounted, setIsMounted] = useState(false);
@@ -11,10 +11,10 @@ export default function LandingSection() {
   
   const targetName = "ARADO";
   
-  // Character pool für LDR-style scramble
-  const glitchChars = ['@', '#', '$', '%', '&', '*', '/', '\\', '|', '?', '!', '~', '^', '¿', '¡', '§', '±', '∞', '∑', '∂', '∆', '∏', '√', '∫', '≈', '≠', '≤', '≥', '◊', '◆', '●', '○', '□', '■', '△', '▽', '◉', '◎', '◐', '◑'];
-  const alphaChars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-  const allChars = [...glitchChars, ...alphaChars];
+  // AKTION: Character Pools mit useMemo umschließen
+  const glitchChars = useMemo(() => ['@', '#', '$', '%', '&', '*', '/', '\\', '|', '?', '!', '~', '^', '¿', '¡', '§', '±', '∞', '∑', '∂', '∆', '∏', '√', '∫', '≈', '≠', '≤', '≥', '◊', '◆', '●', '○', '□', '■', '△', '▽', '◉', '◎', '◐', '◑'], []);
+  const alphaChars = useMemo(() => ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'], []);
+  const allChars = useMemo(() => [...glitchChars, ...alphaChars], [glitchChars, alphaChars]); // AKTION: allChars hängt von glitchChars und alphaChars ab
   
   // State für scramble characters
   const [displayChars, setDisplayChars] = useState<string[]>(targetName.split(''));
@@ -95,7 +95,7 @@ export default function LandingSection() {
       scrambleIntervals.forEach(clearInterval);
       finalTimeouts.forEach(clearTimeout);
     };
-  }, [isMounted]);
+  }, [isMounted, allChars, alphaChars]); // AKTION: allChars und alphaChars als Abhängigkeiten hinzugefügt
 
   useEffect(() => {
     setIsMounted(true);

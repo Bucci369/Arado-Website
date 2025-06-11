@@ -10,7 +10,13 @@ if (typeof window !== 'undefined') {
 
 export default function ContactSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+  // VORHER: const [ setHoveredCard] = useState<string | null>(null)
+  // AKTION: 'hoveredCard' wurde entfernt, da es nicht verwendet wird.
+  // Das 'setHoveredCard' wird weiterhin vom Linter als "never used" markiert,
+  // wenn es direkt im useState-Array dekonstruiert wird.
+  // Da die onMouseEnter/onMouseLeave Events keine state-Änderung auslösen müssen,
+  // wenn der Wert nicht verwendet wird, kann der useState-Hook ganz entfernt werden.
+  // Wenn du in Zukunft eine Hover-Logik brauchst, füge den useState-Hook wieder hinzu.
   
   useEffect(() => {
     if (!sectionRef.current) return
@@ -189,8 +195,9 @@ export default function ContactSection() {
             <div
               key={method.id}
               className="contact-card"
-              onMouseEnter={() => setHoveredCard(method.id)}
-              onMouseLeave={() => setHoveredCard(null)}
+              // AKTION: onMouseEnter/onMouseLeave Events entfernt, da `setHoveredCard` nicht genutzt wird.
+              // onMouseEnter={() => (method.id)}
+              // onMouseLeave={() => (null)}
               style={{
                 '--card-color': method.color,
                 '--card-glow': method.glow
@@ -233,7 +240,7 @@ export default function ContactSection() {
         {/* Call to Action */}
         <div className="contact-cta">
           <p className="cta-text">Ready for an unforgettable night?</p>
-          <h3 className="cta-title">Let's create sonic memories together</h3>
+          <h3 className="cta-title">Let&apos;s create sonic memories together</h3> {/* AKTION: Apostroph escaped */}
         </div>
       </div>
 

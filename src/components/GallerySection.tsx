@@ -1,7 +1,6 @@
-// src/app/components/GallerySection.tsx
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react' // AKTION: useMemo hinzugefügt
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { gsap } from 'gsap'
@@ -124,10 +123,10 @@ const LazyGalleryImage = ({
 export default function OptimizedGallerySection() {
   const sectionRef = useRef<HTMLElement>(null)
   
-
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   
-  const images: GalleryImage[] = [
+  // AKTION: images Array mit useMemo umschließen
+  const images: GalleryImage[] = useMemo(() => [
     { src: "/assets/images/image8.jpg", alt: "ARADO Profile", size: 'large', width: 800, height: 1200, objectPosition: 'center 20%' },
     { src: "/assets/images/image6.jpg", alt: "Studio Session", size: 'small', width: 1920, height: 1080, objectPosition: 'center top' },
     { src: "/assets/images/image9.jpg", alt: "Festival Crowd", size: 'medium', width: 1080, height: 1920, objectPosition: 'center center' },
@@ -135,12 +134,12 @@ export default function OptimizedGallerySection() {
     { src: "/assets/images/image5.jpg", alt: "Backstage", size: 'large', width: 1200, height: 800, objectPosition: 'center 30%' },
     { src: "/assets/images/image7.jpg", alt: "Live Performance", size: 'medium', width: 1920, height: 1280 },
     { src: "/assets/images/image4.jpg", alt: "Pacha Event", size: 'small', width: 900, height: 1600 },
-  ]
+  ], []) // AKTION: Leeres Abhängigkeitsarray, da die Bilder statisch sind.
 
   const openModal = useCallback((imageSrc: string) => {
     const image = images.find(img => img.src === imageSrc)
     if (image) setSelectedImage(image)
-  }, [images])
+  }, [images]) // AKTION: `images` als Abhängigkeit für `useCallback` hinzufügen
 
   const closeModal = useCallback(() => {
     setSelectedImage(null)
