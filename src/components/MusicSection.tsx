@@ -281,13 +281,7 @@ export default function MusicSection() {
         <div className="orbit-line orbit-line-4"></div>
         <div className="orbit-line orbit-line-5"></div>
         
-        {/* Sternschnuppen hier einfügen, da sie nicht mehr von Pseudo-Elementen generiert werden */}
-        {/* Die Anzahl und Positionierung der shooting-star Divs muss manuell angepasst werden,
-            wenn sie nicht über CSS Pseudo-Elemente generiert werden. */}
-        <div className="shooting-star" style={{ top: '10%', left: '10%' }}></div>
-        <div className="shooting-star" style={{ top: '30%', left: '80%' }}></div>
-        <div className="shooting-star" style={{ top: '60%', left: '20%' }}></div>
-
+        
         <div ref={wrapperRef} className="planets-wrapper" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
           {tracks.slice(0, 6).map((track, index) => (
             <div key={track.id} className={`spotify-player`}>

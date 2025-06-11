@@ -12,7 +12,6 @@ import ScrollBackground from '@/components/ScrollBackground'
 import VinylCollectionSection from '@/components/VinylCollectionSection'
 
 
-
 export default function Home() {
   return (
     <>
