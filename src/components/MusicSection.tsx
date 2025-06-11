@@ -58,58 +58,83 @@ export default function MusicSection() {
     }
   }
 
-  const fetchSpotifyTracks = useCallback(async () => {
-    try {
-      setLoading(true)
-      const existingTracks = getStoredAradoTracks()
-      if (existingTracks.length > 0) {
-        setTracks(existingTracks)
-      }
+  const getFallbackTracks = (): SpotifyTrack[] => [
+    { id: '1', name: 'Uganda Express', preview_url: '/assets/audio/track1.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_1' }, album: { name: 'Desolat X005', images: [{ url: '/assets/images/image1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }, { name: 'Den Ishu' }], duration_ms: 431000, popularity: 65 },
+    { id: '2', name: 'Berlin Nights', preview_url: '/assets/audio/track2.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_2' }, album: { name: 'Desolat Sessions', images: [{ url: '/assets/images/Profilbild1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 387000, popularity: 58 },
+    { id: '3', name: 'Deep House Therapy', preview_url: '/assets/audio/track3.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_3' }, album: { name: 'Underground Collective', images: [{ url: '/assets/images/image1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 412000, popularity: 52 },
+    { id: '4', name: 'Techno Dreams', preview_url: '/assets/audio/track1.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_4' }, album: { name: 'Electronic Visions', images: [{ url: '/assets/images/Profilbild1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 398000, popularity: 48 },
+    { id: '5', name: 'Minimal Groove', preview_url: '/assets/audio/track2.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_5' }, album: { name: 'Groove Selection', images: [{ url: '/assets/images/image1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 360000, popularity: 60 },
+    { id: '6', name: 'Morning Light', preview_url: '/assets/audio/track3.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_6' }, album: { name: 'Sunrise EP', images: [{ url: '/assets/images/Profilbild1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 405000, popularity: 55 }
+  ];
 
+  const fetchSpotifyTracks = useCallback(async () => {
+    setLoading(true);
+    let fetchedTracks: SpotifyTrack[] = [];
+    try {
       const searches = [
         'artist:"Arado"', 'artist:"DJ ARADO"', '"Uganda Express"',
         'artist:"Arado" techno', 'artist:"Arado" house', 'artist:"Arado" minimal',
         'Desolat label', '"Den Ishu" Arado'
-      ]
-      let allFoundTracks: SpotifyTrack[] = [...existingTracks]
+      ];
+      let allFoundTracks: SpotifyTrack[] = [];
 
       for (const searchTerm of searches) {
         try {
-          const searchResponse = await fetch(`/api/deezer-search?q=${encodeURIComponent(searchTerm)}&limit=10`)
+          const searchResponse = await fetch(`/api/deezer-search?q=${encodeURIComponent(searchTerm)}&limit=10`);
           if (searchResponse.ok) {
-            const data = await searchResponse.json()
+            const data = await searchResponse.json();
             if (data.tracks && data.tracks.length > 0) {
               const filteredTracks = data.tracks.filter((track: SpotifyTrack) => {
-                const trackName = track.name.toLowerCase()
-                const artistName = track.artists[0]?.name.toLowerCase() || ''
-                const albumName = track.album?.name.toLowerCase() || ''
-                const isAradoRelated = artistName.includes('arado') || trackName.includes('uganda express') || albumName.includes('desolat') || (trackName.includes('techno') && artistName.includes('arado')) || (trackName.includes('house') && artistName.includes('arado'))
-                const isDuplicate = allFoundTracks.some(existing => existing.id === track.id)
-                return isAradoRelated && !isDuplicate
-              })
-
-              allFoundTracks = [...allFoundTracks, ...filteredTracks]
-              if (allFoundTracks.length > existingTracks.length) {
-                storeAradoTracks(allFoundTracks.slice(0, 6))
-                setTracks(allFoundTracks.slice(0, 6))
-              }
+                const trackName = track.name.toLowerCase();
+                const artistName = track.artists[0]?.name.toLowerCase() || '';
+                const albumName = track.album?.name.toLowerCase() || '';
+                const isAradoRelated = artistName.includes('arado') || trackName.includes('uganda express') || albumName.includes('desolat') || (trackName.includes('techno') && artistName.includes('arado')) || (trackName.includes('house') && artistName.includes('arado'));
+                const isDuplicate = allFoundTracks.some(existing => existing.id === track.id);
+                // Wichtig: Filtere hier direkt nach track.preview_url, da du sie brauchst.
+                return isAradoRelated && !isDuplicate && track.preview_url;
+              });
+              allFoundTracks = [...allFoundTracks, ...filteredTracks];
             }
+          } else {
+            console.error('Deezer API search not OK for', searchTerm, searchResponse.status, searchResponse.statusText);
           }
         } catch (error) {
-          console.log(`Search failed for: ${searchTerm}`, error)
-          continue
+          console.error(`Search failed for: ${searchTerm}`, error);
+          continue;
         }
       }
-      if (allFoundTracks.length === 0) {
-        setTracks(getFallbackTracks())
+      fetchedTracks = allFoundTracks.slice(0, 6); // Limitiere auf die ersten 6 Tracks
+
+      if (fetchedTracks.length > 0) {
+        storeAradoTracks(fetchedTracks); // Speichere NUR frisch abgerufene Tracks
+        setTracks(fetchedTracks);
+      } else {
+        // Wenn keine frischen Tracks gefunden wurden, versuche es aus dem localStorage oder Fallback
+        const stored = getStoredAradoTracks();
+        if (stored.length > 0) {
+            setTracks(stored);
+            console.warn('No fresh tracks, using stored tracks from localStorage. URLs might be outdated.');
+        } else {
+            setTracks(getFallbackTracks()); // Fallback, wenn nichts gefunden oder gespeichert
+            console.warn('Using fallback tracks, no tracks found from API or localStorage.');
+        }
       }
+
     } catch (error) {
-      console.error('Error fetching tracks:', error)
-      setTracks(getFallbackTracks())
+      console.error('General error fetching tracks:', error);
+      // Wenn ein Fehler auftritt, versuche es aus dem localStorage oder Fallback
+      const stored = getStoredAradoTracks();
+      if (stored.length > 0) {
+          setTracks(stored);
+          console.warn('Error fetching fresh tracks, using stored tracks from localStorage. URLs might be outdated.');
+      } else {
+          setTracks(getFallbackTracks());
+          console.warn('Using fallback tracks due to error, no tracks from API or localStorage.');
+      }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, [getFallbackTracks]); // `getFallbackTracks` als Abhängigkeit hinzufügen, falls es sich jemals ändert
 
   useEffect(() => {
     fetchSpotifyTracks()
@@ -118,9 +143,6 @@ export default function MusicSection() {
   useEffect(() => {
    if (!loading && wrapperRef.current) {
       const container = wrapperRef.current;
-      // const rect = container.getBoundingClientRect(); // Nicht mehr benötigt, wenn Container quadratisch
-      // const aspect = rect.height > 0 ? rect.width / rect.height : 1; // Nicht mehr benötigt
-
       const players = gsap.utils.toArray<HTMLElement>(container.children);
 
       const orbits = [
@@ -141,7 +163,6 @@ export default function MusicSection() {
           const angle = (orbit.initialAngle * (Math.PI / 180)) + (time / orbit.speed);
 
           const x = orbit.radius * Math.cos(angle);
-          // Die Y-Berechnung vereinfachen, da der Container jetzt quadratisch ist
           const y = orbit.radius * Math.sin(angle); 
 
           gsap.set(player, { x: x, y: y, xPercent: -50, yPercent: -50, transformOrigin: 'center center' });
@@ -156,20 +177,17 @@ export default function MusicSection() {
     }
   }, [loading, tracks]);
 
-  const getFallbackTracks = (): SpotifyTrack[] => [
-    { id: '1', name: 'Uganda Express', preview_url: '/assets/audio/track1.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_1' }, album: { name: 'Desolat X005', images: [{ url: '/assets/images/image1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }, { name: 'Den Ishu' }], duration_ms: 431000, popularity: 65 },
-    { id: '2', name: 'Berlin Nights', preview_url: '/assets/audio/track2.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_2' }, album: { name: 'Desolat Sessions', images: [{ url: '/assets/images/Profilbild1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 387000, popularity: 58 },
-    { id: '3', name: 'Deep House Therapy', preview_url: '/assets/audio/track3.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_3' }, album: { name: 'Underground Collective', images: [{ url: '/assets/images/image1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 412000, popularity: 52 },
-    { id: '4', name: 'Techno Dreams', preview_url: '/assets/audio/track1.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_4' }, album: { name: 'Electronic Visions', images: [{ url: '/assets/images/Profilbild1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 398000, popularity: 48 },
-    { id: '5', name: 'Minimal Groove', preview_url: '/assets/audio/track2.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_5' }, album: { name: 'Groove Selection', images: [{ url: '/assets/images/image1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 360000, popularity: 60 },
-    { id: '6', name: 'Morning Light', preview_url: '/assets/audio/track3.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_6' }, album: { name: 'Sunrise EP', images: [{ url: '/assets/images/Profilbild1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }], duration_ms: 405000, popularity: 55 }
-  ];
-
   const togglePlay = (trackIndex: number) => {
     const track = tracks[trackIndex]
-    if (!track.preview_url) return;
+    if (!track.preview_url) {
+      console.warn(`No preview URL found for track: ${track.name}`); // Füge einen Console-Log hinzu
+      return;
+    }
     const audio = audioRefs.current[trackIndex]
-    if (!audio) return
+    if (!audio) {
+      console.error(`Audio element not found for track index: ${trackIndex}`); // Füge einen Console-Log hinzu
+      return
+    }
 
     audioRefs.current.forEach((otherAudio, index) => {
       if (otherAudio && index !== trackIndex) {
@@ -183,7 +201,15 @@ export default function MusicSection() {
       setIsPlaying(false)
       setCurrentTrackIndex(null)
     } else {
-      audio.play().catch(error => console.error('Error playing track:', error))
+      audio.play().catch(error => {
+        console.error('Error playing track:', error);
+        // Zusätzlicher Log für den Fehler, um mehr Details zu bekommen
+        if (error.name === 'NotSupportedError') {
+          console.error('Possible reason: Media format not supported or URL is invalid/expired.', track.preview_url);
+        } else if (error.name === 'NotAllowedError') {
+          console.error('Possible reason: Autoplay was prevented by the browser. User interaction might be insufficient.');
+        }
+      });
       setIsPlaying(true)
       setCurrentTrackIndex(trackIndex)
     }
@@ -208,7 +234,7 @@ export default function MusicSection() {
 
   if (loading) {
     return (
-      <section id="my-music" className="page-section section-is-white new-style-section" style={{ background: 'transparent', position: 'relative', minHeight: '100vh', padding: '4rem 2rem' }}>
+      <section id="my-music" className="page-section section-is-white new-style-section" style={{ background: 'transparent', position: 'relative', minHeight: '100vh' }}>
         {/* Hinzugefügter section-content-container für den Ladezustand */}
         <div className="section-content-container">
           <div className="section-header">
@@ -256,9 +282,11 @@ export default function MusicSection() {
         <div className="orbit-line orbit-line-5"></div>
         
         {/* Sternschnuppen hier einfügen, da sie nicht mehr von Pseudo-Elementen generiert werden */}
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
-        <div className="shooting-star"></div>
+        {/* Die Anzahl und Positionierung der shooting-star Divs muss manuell angepasst werden,
+            wenn sie nicht über CSS Pseudo-Elemente generiert werden. */}
+        <div className="shooting-star" style={{ top: '10%', left: '10%' }}></div>
+        <div className="shooting-star" style={{ top: '30%', left: '80%' }}></div>
+        <div className="shooting-star" style={{ top: '60%', left: '20%' }}></div>
 
         <div ref={wrapperRef} className="planets-wrapper" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
           {tracks.slice(0, 6).map((track, index) => (
