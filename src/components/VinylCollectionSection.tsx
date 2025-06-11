@@ -42,7 +42,7 @@ export default function VinylCollectionSection() {
 
   useEffect(() => {
     // Stellen Sie sicher, dass dieser Code nur im Browser ausgeführt wird.
-    if (typeof window === 'undefined') return; //
+    if (typeof window === 'undefined') return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -129,15 +129,34 @@ export default function VinylCollectionSection() {
   const animatedBackgroundStyle = { y: backgroundY }
   
   const getCirclePosition = (index: number, total: number) => {
-    // AKTION: Radien und Z-Index für Mobilgeräte anpassen
-    // Diese Bedingung muss auch Client-seitig geprüft werden
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768; //
+    // AKTION: Dynamische Radien basierend auf Viewport-Größe
+    if (typeof window === 'undefined') {
+      // Fallback für SSR
+      const radius = 350;
+      const angle = (index / total) * Math.PI * 2 - Math.PI / 2 
+      const x = Math.cos(angle) * radius
+      const y = Math.sin(angle) * radius * 0.5
+      const z = Math.cos(angle * 2) * 80 + 50
+      return { x, y, z, rotate: 0 }
+    }
     
-    // Kleinere Radii für Mobilgeräte
-    const radius = isMobile ? 120 : 350; 
-    const yMultiplier = isMobile ? 0.3 : 0.5; // Weniger vertikale Streckung auf Mobilgeräten
-    const zBase = isMobile ? 20 : 50; // Weniger Tiefe auf Mobilgeräten
-    const zRange = isMobile ? 40 : 80;
+    const vw = window.innerWidth;
+    const isMobile = vw <= 480;
+    const isTablet = vw <= 768;
+    
+    // Dynamische Radien basierend auf Viewport-Breite
+    let radius;
+    if (isMobile) {
+      radius = vw * 0.35; // 35% der Viewport-Breite
+    } else if (isTablet) {
+      radius = vw * 0.28; // 28% der Viewport-Breite
+    } else {
+      radius = Math.min(350, vw * 0.25); // 25% der Viewport-Breite, max 350px
+    }
+    
+    const yMultiplier = isMobile ? 0.3 : isTablet ? 0.4 : 0.5;
+    const zBase = isMobile ? 10 : isTablet ? 30 : 50;
+    const zRange = isMobile ? 20 : isTablet ? 50 : 80;
 
     const angle = (index / total) * Math.PI * 2 - Math.PI / 2 
     const x = Math.cos(angle) * radius
@@ -200,16 +219,30 @@ export default function VinylCollectionSection() {
           justifyContent: 'center', 
           alignItems: 'center',
           // AKTION: Höhe für Mobilgeräte anpassen
-          maxHeight: typeof window !== 'undefined' && window.innerWidth <= 768 ? '400px' : '600px' //
+          maxHeight: typeof window !== 'undefined' && window.innerWidth <= 768 ? '400px' : '600px'
         }}
       >
         {vinylCovers.map((vinyl, index) => {
           const position = getCirclePosition(index, vinylCovers.length)
-          // AKTION: Vinyl-Größe für Mobilgeräte anpassen
-          const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768; //
-          const vinylSize = isMobile ? '120px' : '280px';
-          const marginLeft = isMobile ? '-60px' : '-140px';
-          const marginTop = isMobile ? '-60px' : '-140px';
+          // AKTION: Dynamische Vinyl-Größen basierend auf Viewport
+          const vw = typeof window !== 'undefined' ? window.innerWidth : 1024;
+          const isMobile = vw <= 480;
+          const isTablet = vw <= 768;
+          
+          let vinylSize, marginLeft, marginTop;
+          if (isMobile) {
+            vinylSize = '80px';
+            marginLeft = '-40px';
+            marginTop = '-40px';
+          } else if (isTablet) {
+            vinylSize = '120px';
+            marginLeft = '-60px';
+            marginTop = '-60px';
+          } else {
+            vinylSize = '200px';
+            marginLeft = '-100px';
+            marginTop = '-100px';
+          }
 
           return (
             <motion.div

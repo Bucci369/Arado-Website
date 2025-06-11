@@ -478,14 +478,15 @@ body::after {
 }
 
 /* MODIFIED: .spotify-players-container aktualisiert */
+/* ===== ÄNDERUNG 1: Spotify Players Container ===== */
+/* ERSETZE den alten Code mit diesem: */
+
 #my-music .spotify-players-container {
     position: relative;
     flex: 1;
-    /* Angepasste Größe für quadratischen Container, der sich an Viewport anpasst */
-    width: 90vmin;   /* Passt sich an die kleinere Viewport-Dimension an */
-    height: 90vmin;  /* Bleibt quadratisch */
-    min-width: 1040px; /* Mindestgröße für den größten Orbit */
-    min-height: 1040px; /* Muss mit min-width übereinstimmen */
+    /* Container passt sich an Viewport an */
+    width: min(90vw, 1040px);   /* Maximal 90% der Viewport-Breite oder 1040px */
+    height: min(90vw, 1040px);  /* Bleibt quadratisch */
     aspect-ratio: 1 / 1; /* Stellt die Quadrat-Proportion sicher */
     
     display: flex;
@@ -593,11 +594,12 @@ body::after {
   z-index: 5;
   pointer-events: none;
 }
-.orbit-line-1 { width: 400px; height: 400px; }
-.orbit-line-2 { width: 560px; height: 560px; }
-.orbit-line-3 { width: 720px; height: 720px; }
-.orbit-line-4 { width: 880px; height: 880px; }
-.orbit-line-5 { width: 1040px; height: 1040px; }
+/* Responsive Orbit-Linien */
+.orbit-line-1 { width: min(38vw, 400px); height: min(38vw, 400px); }
+.orbit-line-2 { width: min(54vw, 560px); height: min(54vw, 560px); }
+.orbit-line-3 { width: min(70vw, 720px); height: min(70vw, 720px); }
+.orbit-line-4 { width: min(85vw, 880px); height: min(85vw, 880px); }
+.orbit-line-5 { width: min(100vw, 1040px); height: min(100vw, 1040px); }
 
 
 /* ===== STATS, LISTS, VIDEO, CONTACT, GALLERY, FOOTER SECTIONS ===== */
@@ -810,6 +812,76 @@ body::after {
   }
   .gallery-modal {
     padding: 0.5rem; 
+  }
+}
+
+@media (max-width: 768px) {
+  /* Angepasste spotify-players-container für kleinere Bildschirme */
+  #my-music .spotify-players-container {
+    width: 85vw;
+    height: 85vw;
+    max-width: 600px; /* Begrenze maximale Größe auf Tablets */
+    max-height: 600px;
+  }
+  
+  /* Kleinere Player-Discs auf Mobilgeräten */
+  .player-disc {
+    width: 100px !important;
+    height: 100px !important;
+    min-width: 100px !important;
+    min-height: 100px !important;
+  }
+  
+  .spotify-player:nth-child(1) .player-disc {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  
+  /* Kleinere Play-Buttons */
+  .play-button {
+    width: 35px !important;
+    height: 35px !important;
+  }
+  
+  .play-button svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  /* Kompaktere Track-Info */
+  .track-info {
+    width: 150px !important;
+    padding: 8px 12px !important;
+    bottom: -60px !important;
+  }
+  
+  .track-title {
+    font-size: 0.8rem !important;
+  }
+  
+  .track-artist {
+    font-size: 0.7rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #my-music .spotify-players-container {
+    width: 90vw;
+    height: 90vw;
+    max-width: 400px;
+    max-height: 400px;
+  }
+  
+  .player-disc {
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+  }
+  
+  .spotify-player:nth-child(1) .player-disc {
+    width: 100px !important;
+    height: 100px !important;
   }
 }
 
