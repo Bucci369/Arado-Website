@@ -118,8 +118,8 @@ export default function MusicSection() {
   useEffect(() => {
    if (!loading && wrapperRef.current) {
       const container = wrapperRef.current;
-      const rect = container.getBoundingClientRect();
-      const aspect = rect.height > 0 ? rect.width / rect.height : 1;
+      // const rect = container.getBoundingClientRect(); // Nicht mehr benötigt, wenn Container quadratisch
+      // const aspect = rect.height > 0 ? rect.width / rect.height : 1; // Nicht mehr benötigt
 
       const players = gsap.utils.toArray<HTMLElement>(container.children);
 
@@ -141,7 +141,8 @@ export default function MusicSection() {
           const angle = (orbit.initialAngle * (Math.PI / 180)) + (time / orbit.speed);
 
           const x = orbit.radius * Math.cos(angle);
-          const y = (orbit.radius / aspect) * Math.sin(angle);
+          // Die Y-Berechnung vereinfachen, da der Container jetzt quadratisch ist
+          const y = orbit.radius * Math.sin(angle); 
 
           gsap.set(player, { x: x, y: y, xPercent: -50, yPercent: -50, transformOrigin: 'center center' });
         });
@@ -153,7 +154,7 @@ export default function MusicSection() {
         gsap.ticker.remove(updatePlanets);
       };
     }
-  }, [loading, tracks]); 
+  }, [loading, tracks]);
 
   const getFallbackTracks = (): SpotifyTrack[] => [
     { id: '1', name: 'Uganda Express', preview_url: '/assets/audio/track1.mp3', external_urls: { spotify: 'https://open.spotify.com/track/REAL_SPOTIFY_ID_1' }, album: { name: 'Desolat X005', images: [{ url: '/assets/images/image1.jpg', height: 640, width: 640 }] }, artists: [{ name: 'DJ ARADO' }, { name: 'Den Ishu' }], duration_ms: 431000, popularity: 65 },
@@ -208,11 +209,14 @@ export default function MusicSection() {
   if (loading) {
     return (
       <section id="my-music" className="page-section section-is-white new-style-section" style={{ background: 'transparent', position: 'relative', minHeight: '100vh', padding: '4rem 2rem' }}>
-        <div className="section-header">
-          <h2 className="section-title"><span className="title-line">My</span><span className="title-line">Music</span></h2>
-          <div className="title-underline"></div>
+        {/* Hinzugefügter section-content-container für den Ladezustand */}
+        <div className="section-content-container">
+          <div className="section-header">
+            <h2 className="section-title"><span className="title-line">My</span><span className="title-line">Music</span></h2>
+            <div className="title-underline"></div>
+          </div>
+          <div className="loading-spinner" style={{ color: '#ffffff', marginTop: '4rem' }}><div className="spinner"></div><p>Loading tracks...</p></div>
         </div>
-        <div className="loading-spinner" style={{ color: '#ffffff', marginTop: '4rem' }}><div className="spinner"></div><p>Loading tracks...</p></div>
       </section>
     )
   }
@@ -225,28 +229,37 @@ export default function MusicSection() {
       style={{ 
         background: 'transparent', 
         position: 'relative',
-        minHeight: '150vh',
+        minHeight: '150vh', // Beibehalten, um ausreichend Scrollraum zu bieten
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '4rem 2rem',
-        paddingTop: '6rem'
+        // padding und paddingTop hier ENTFERNT!
       }}
     >
-      <div className="section-header" style={{ marginBottom: '4rem' }}>
-        <h2 className="section-title">
-          <span className="title-line">Sounds</span>
-          <span className="title-line">From Outer World</span>
-        </h2>
-        <div className="title-underline"></div>
+      {/* section-content-container für den Titelbereich */}
+      <div className="section-content-container">
+        <div className="section-header" style={{ marginBottom: '4rem' }}>
+          <h2 className="section-title">
+            <span className="title-line">Sounds</span>
+            <span className="title-line">From Outer World</span>
+          </h2>
+          <div className="title-underline"></div>
+        </div>
       </div>
       
+      {/* spotify-players-container ohne eigene Hintergründe */}
       <div className="spotify-players-container" style={{ flex: 1, width: '100%', position: 'relative', marginTop: '2rem' }}>
         <div className="orbit-line orbit-line-1"></div>
         <div className="orbit-line orbit-line-2"></div>
         <div className="orbit-line orbit-line-3"></div>
         <div className="orbit-line orbit-line-4"></div>
         <div className="orbit-line orbit-line-5"></div>
+        
+        {/* Sternschnuppen hier einfügen, da sie nicht mehr von Pseudo-Elementen generiert werden */}
+        <div className="shooting-star"></div>
+        <div className="shooting-star"></div>
+        <div className="shooting-star"></div>
+
         <div ref={wrapperRef} className="planets-wrapper" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
           {tracks.slice(0, 6).map((track, index) => (
             <div key={track.id} className={`spotify-player`}>
