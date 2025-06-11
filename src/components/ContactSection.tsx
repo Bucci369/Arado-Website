@@ -56,7 +56,7 @@ export default function ContactSection() {
         <div className="contact-grid">
           <div className="contact-info">
             <div className="contact-intro">
-              <h3 className="contact-subtitle">Let's Make Music</h3>
+              <h3 className="contact-subtitle">Lets Make Music</h3>
               <p className="contact-description">
                 Ready for unforgettable nights? Let's talk about your next event.
               </p>

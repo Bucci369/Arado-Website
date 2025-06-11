@@ -48,7 +48,7 @@ export default function VideoSection() {
             </div>
             <div className="video-info">
               <h3 className="video-title">Berghain Set 2024</h3>
-              <p className="video-description">Epic 4-hour journey through techno - Live from Berlin's legendary club</p>
+              <p className="video-description">Epic 4-hour journey through techno - Live from Berlins legendary club</p>
             </div>
           </div>
 
