@@ -735,3 +735,17 @@ footer {
   position: relative;
   padding: 1.5rem 0;
 }
+
+.shooting-star {
+  width: 70px; /* Die Länge der Sternschnuppe */
+  height: 3px;
+  background: linear-gradient(to right, transparent, white, transparent);
+  /* Die folgenden Eigenschaften (position, animation, z-index, transform, opacity, filter)
+     werden von den Inline-Styles und der GSAP-Animation in GlobalStars.tsx überschrieben/gesetzt,
+     aber diese Basis ist gut, falls es zu Fallbacks kommt. */
+  position: absolute; /* Standardwert, wird von JS überschrieben */
+  animation: none; /* Deaktiviere CSS-Animation hier, da GSAP sie steuert */
+  z-index: 5; /* Standardwert, wird von JS überschrieben */
+  opacity: 0; /* Standardwert, wird von JS/GSAP gesetzt */
+  filter: blur(1px); /* Standardwert, wird von JS/GSAP gesetzt */
+}

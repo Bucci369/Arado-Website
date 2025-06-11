@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="de" className={`${poppins.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans">
-        <GlobalStars count={100} /> {/* <-- HIER MUSS DIE KOMPONENTE VERWENDET WERDEN */}
+        <GlobalStars count={20} /> {/* <-- HIER MUSS DIE KOMPONENTE VERWENDET WERDEN */}
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
