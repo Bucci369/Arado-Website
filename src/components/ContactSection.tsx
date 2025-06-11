@@ -28,7 +28,7 @@ export default function ContactSection() {
       id="contact" 
       className="page-section section-is-white new-style-section"
       style={{
-        background: '#000000',
+        background: 'transparent',
         position: 'relative'
       }}
     >

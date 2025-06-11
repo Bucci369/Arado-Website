@@ -263,15 +263,11 @@ export default function BiographySection() {
       id="about-me" 
       className="page-section"
       style={{
-        background: '#000000',
+        background: 'transparent',
         position: 'relative'
       }}
     >
-      <div 
-        ref={particleContainerRef}
-        className="particle-container"
-      />
-      
+            
       <div className="section-header">
         <h2 className="section-title">
           <span className="title-line">The</span>

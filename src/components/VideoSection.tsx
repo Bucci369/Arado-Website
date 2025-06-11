@@ -8,7 +8,7 @@ export default function VideoSection() {
       id="videos" 
       className="page-section section-is-white new-style-section"
       style={{
-        background: '#000000',
+        background: 'transparent',
         position: 'relative'
       }}
     >

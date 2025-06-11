@@ -404,7 +404,7 @@ export default function LandingSection() {
         ref={sectionRef}
         className="page-section min-h-screen relative flex flex-col items-center justify-center overflow-hidden"
         style={{
-          background: '#000000',
+          background: 'transparent',
           marginBottom: 0, 
           paddingBottom: 0, 
           minHeight: '100vh', 

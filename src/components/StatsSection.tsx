@@ -98,7 +98,7 @@ export default function StatsSection() {
       id="stats" 
       className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
       style={{
-        background: '#000000',
+        background: 'transparent',
         position: 'relative'
       }}
     >
