@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -12,6 +12,7 @@ if (typeof window !== 'undefined') {
 function BiographySection() {
   const sectionRef = useRef<HTMLElement>(null)
   const bioImageWrapperRef = useRef<HTMLDivElement>(null)
+  const [hasImageAnimated, setHasImageAnimated] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -42,9 +43,9 @@ function BiographySection() {
     observer.observe(section)
   
     
-    // Bio Image Animation - VERBESSERT
+    // Bio Image Animation
     const bioImage = section.querySelector('.bio-image') as HTMLElement
-    if (bioImage) {
+    if (bioImage && !hasImageAnimated) {
       gsap.set(bioImage, { opacity: 0, scale: 0.95, y: 30 })
       
       gsap.to(bioImage, {
@@ -56,30 +57,13 @@ function BiographySection() {
         scrollTrigger: {
           trigger: bioImage,
           start: "top 95%",
-          toggleActions: "play none none reverse"
+          once: true,
+        },
+        onStart: () => {
+          setHasImageAnimated(true)
         }
       })
     }
-
-    // Bio Paragraphs Animation - VERBESSERT
-    const bioParagraphs = section.querySelectorAll('.bio-paragraph')
-    bioParagraphs.forEach((paragraph, index) => {
-      const el = paragraph as HTMLElement
-      gsap.set(el, { opacity: 0, y: 15 })
-      
-      gsap.to(el, {
-        opacity: 1,
-        y: 0,
-        duration: 1.0,
-        delay: index * 0.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 95%",
-          toggleActions: "play none none reverse"
-        }
-      })
-    })
 
     // Parallax für Profilbild
     let parallaxAnimationId: number | null = null
@@ -129,8 +113,11 @@ function BiographySection() {
         bioImageWrapper.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
-  }, [])
+    // highlight-start
+  }, []) // KORREKTUR: Array wieder leer, damit der Effekt nur einmal läuft.
+    // highlight-end
 
+  // ... der Rest der Komponente (return statement) bleibt gleich
   return (
     <section 
       ref={sectionRef}
@@ -141,7 +128,6 @@ function BiographySection() {
         position: 'relative'
       }}
     >
-            
       <div className="section-header">
         <h2 className="section-title">
           <span className="title-line">The</span>
@@ -208,7 +194,7 @@ function BiographySection() {
         </div>
         
         <div 
-           
+          className="bio-text"
           style={{ color: '#FFFFFF' }} 
         >
           <p className="bio-paragraph">

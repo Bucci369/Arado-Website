@@ -1,10 +1,9 @@
 // src/app/components/StatsSection.tsx
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -12,7 +11,9 @@ if (typeof window !== 'undefined') {
 
 export default function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
- 
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const hasAnimatedRef = useRef(false)
 
   const stats = [
     {
@@ -47,36 +48,38 @@ export default function StatsSection() {
     if (typeof window === 'undefined') return
 
     const section = sectionRef.current
-    if (!section) return
+    const container = containerRef.current
+    if (!section || !container) return
 
     // Number formatting function
     const formatNumberDE = (value: number) => {
       return Math.round(value).toLocaleString('de-DE')
     }
 
-    // Animate stats numbers
-    const statsItemsForNumberAnimation = section.querySelectorAll('.stat-item')
-    if (statsItemsForNumberAnimation.length > 0) {
-      statsItemsForNumberAnimation.forEach(item => {
+    function animateNumbers() {
+      if (hasAnimatedRef.current || !container) return
+      hasAnimatedRef.current = true
+
+      const statsItems = container.querySelectorAll('.stat-item')
+      
+      statsItems.forEach((item, index) => {
         const statNumberElement = item.querySelector('.stat-number') as HTMLElement
         if (statNumberElement) {
           const targetValue = parseFloat(statNumberElement.dataset.targetValue || '0')
           let startValue = parseFloat(statNumberElement.dataset.startValue || '0')
+          
           if (isNaN(targetValue)) return
           if (isNaN(startValue)) { startValue = 0 }
 
           statNumberElement.textContent = formatNumberDE(startValue)
           const animatedValue = { val: startValue }
 
+          // Gestaffelte Animation mit Delay
           gsap.to(animatedValue, {
             val: targetValue,
             duration: 2.5,
+            delay: index * 0.15, // Etwas mehr Delay für dramatischen Effekt
             ease: "power2.out",
-            scrollTrigger: {
-              trigger: statNumberElement,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
             onUpdate: () => { 
               statNumberElement.textContent = formatNumberDE(animatedValue.val)
             },
@@ -84,40 +87,139 @@ export default function StatsSection() {
               statNumberElement.textContent = formatNumberDE(targetValue)
             }
           })
+
+          // Fade-in Effekt für die Labels
+          gsap.from(item, {
+            opacity: 0,
+            y: 30,
+            duration: 1,
+            delay: index * 0.15,
+            ease: "power2.out"
+          })
         }
       })
     }
+
+    // Option 1: ScrollTrigger mit mehreren Trigger-Punkten
+    const st = ScrollTrigger.create({
+      trigger: container,
+      start: "top 70%", // Startet erst wenn 70% der Container im View ist
+      end: "bottom 30%",
+      markers: false, // Setze auf true zum Debuggen
+      onEnter: () => {
+        console.log('Stats section entered viewport')
+        setIsVisible(true)
+        animateNumbers()
+      },
+      onLeaveBack: () => {
+        // Reset wenn user nach oben scrollt
+        setIsVisible(false)
+      },
+      once: false // Animation kann wiederholt werden
+    })
+
+    // Option 2: Zusätzlicher Fallback mit IntersectionObserver
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) { // Mindestens 50% sichtbar
+            console.log('Stats section 50% visible')
+            if (!hasAnimatedRef.current) {
+              animateNumbers()
+            }
+          }
+        })
+      },
+      {
+        threshold: [0.5, 0.7, 0.9], // Multiple Schwellenwerte
+        rootMargin: '0px'
+      }
+    )
+
+    observer.observe(container)
+
+    // Option 3: Time-based Fallback
+    // Falls der User sehr lange in der vorherigen Section bleibt
+    const checkVisibility = () => {
+      const rect = container.getBoundingClientRect()
+      const windowHeight = window.innerHeight
+      const isInView = rect.top < windowHeight * 0.7 && rect.bottom > windowHeight * 0.3
+      
+      if (isInView && !hasAnimatedRef.current) {
+        console.log('Stats section in view - manual check')
+        animateNumbers()
+      }
+    }
+
+    // Check alle 500ms ob Section sichtbar ist
+    const intervalId = setInterval(checkVisibility, 500)
 
     // Cleanup
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        // Tötet nur die Trigger, die mit .stat-item assoziiert sind, oder die durch diesen useEffect erstellt wurden
-        if (trigger.trigger && (trigger.trigger as HTMLElement).closest('.stat-item')) {
-            trigger.kill();
-        }
-      })
+      st.kill()
+      observer.disconnect()
+      clearInterval(intervalId)
+      gsap.killTweensOf('.stat-number')
     }
   }, [])
 
+  // Manual trigger Button für Notfälle
+  const manualTrigger = () => {
+    hasAnimatedRef.current = false
+    const container = containerRef.current
+    if (!container) return
+    
+    // Reset alle Zahlen
+    container.querySelectorAll('.stat-number').forEach(el => {
+      const startValue = parseFloat(el.getAttribute('data-start-value') || '0')
+      el.textContent = startValue.toLocaleString('de-DE')
+    })
+    
+    // Warte kurz, dann animiere
+    setTimeout(() => {
+      const section = sectionRef.current
+      if (!section) return
+      
+      const event = new Event('scroll')
+      window.dispatchEvent(event)
+      ScrollTrigger.refresh()
+    }, 100)
+  }
+
   return (
     <section 
-      ref={sectionRef} // Ref für die Hook hier zuweisen
+      ref={sectionRef}
       id="stats" 
-      className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
+      className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white relative"
       style={{
         background: 'transparent',
         position: 'relative'
       }}
     >
+      {/* Trigger-Indikator für Debugging */}
+      <div className={`absolute top-4 left-4 px-3 py-1 rounded text-xs transition-all ${
+        isVisible ? 'bg-green-500' : 'bg-red-500'
+      }`}>
+        {isVisible ? 'Animation aktiv' : 'Warte auf Trigger'}
+      </div>
+
+      {/* Manual Trigger Button */}
+      <button 
+        onClick={manualTrigger}
+        className="absolute top-4 right-4 bg-cyan-500 text-white px-4 py-2 rounded hover:bg-cyan-600 transition-colors text-sm"
+      >
+        Animation starten
+      </button>
+
       <div className="section-header mb-16">
         <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
           <span className="title-line block">Career</span>
-          <span className="title-line block">Milestones</span> {/* Oder "Stats" wie im Original */}
+          <span className="title-line block">Milestones</span>
         </h2>
         <div className="title-underline w-12 h-1 bg-gradient-to-r from-cyan-400 to-cyan-600 mx-auto"></div>
       </div>
 
-      <div className="stats-container max-w-4xl w-full mx-auto px-4">
+      <div ref={containerRef} className="stats-container max-w-4xl w-full mx-auto px-4">
         <div className="stats-grid grid grid-cols-2 gap-8 mb-10">
           {stats.map((stat, index) => (
             <div key={index} className="stat-item text-center">
