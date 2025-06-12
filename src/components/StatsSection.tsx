@@ -1,7 +1,7 @@
 // src/app/components/StatsSection.tsx
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react' // useState wurde entfernt
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -12,30 +12,14 @@ if (typeof window !== 'undefined') {
 export default function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  // const [isVisible, setIsVisible] = useState(false) // <--- ENTFERNT
   const hasAnimatedRef = useRef(false)
 
   const stats = [
-    {
-      number: 25,
-      label: "Years in Business",
-      startValue: 10
-    },
-    {
-      number: 192,
-      label: "Clubs Played",
-      startValue: 0
-    },
-    {
-      number: 12,
-      label: "Awards",
-      startValue: 0
-    },
-    {
-      number: 492,
-      label: "Releases",
-      startValue: 0
-    }
+    { number: 25, label: "Years in Business", startValue: 10 },
+    { number: 192, label: "Clubs Played", startValue: 0 },
+    { number: 12, label: "Awards", startValue: 0 },
+    { number: 492, label: "Releases", startValue: 0 }
   ]
 
   const spotifyStats = {
@@ -51,7 +35,6 @@ export default function StatsSection() {
     const container = containerRef.current
     if (!section || !container) return
 
-    // Number formatting function
     const formatNumberDE = (value: number) => {
       return Math.round(value).toLocaleString('de-DE')
     }
@@ -74,11 +57,10 @@ export default function StatsSection() {
           statNumberElement.textContent = formatNumberDE(startValue)
           const animatedValue = { val: startValue }
 
-          // Gestaffelte Animation mit Delay
           gsap.to(animatedValue, {
             val: targetValue,
             duration: 2.5,
-            delay: index * 0.15, // Etwas mehr Delay für dramatischen Effekt
+            delay: index * 0.15,
             ease: "power2.out",
             onUpdate: () => { 
               statNumberElement.textContent = formatNumberDE(animatedValue.val)
@@ -88,7 +70,6 @@ export default function StatsSection() {
             }
           })
 
-          // Fade-in Effekt für die Labels
           gsap.from(item, {
             opacity: 0,
             y: 30,
@@ -100,29 +81,27 @@ export default function StatsSection() {
       })
     }
 
-    // Option 1: ScrollTrigger mit mehreren Trigger-Punkten
     const st = ScrollTrigger.create({
       trigger: container,
-      start: "top 95%", // Startet erst wenn 70% der Container im View ist
+      start: "top 70%",
       end: "bottom 30%",
-      markers: false, // Setze auf true zum Debuggen
+      markers: false,
       onEnter: () => {
         console.log('Stats section entered viewport')
-        setIsVisible(true)
+        // setIsVisible(true) // <--- ENTFERNT
         animateNumbers()
       },
       onLeaveBack: () => {
-        // Reset wenn user nach oben scrollt
-        setIsVisible(false)
+        // setIsVisible(false) // <--- ENTFERNT
       },
-      once: false // Animation kann wiederholt werden
+      once: false
     })
-
-    // Option 2: Zusätzlicher Fallback mit IntersectionObserver
+    
+    // Der IntersectionObserver kann bleiben oder auch entfernt werden, da ScrollTrigger die Hauptlogik ist.
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) { // Mindestens 50% sichtbar
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
             console.log('Stats section 50% visible')
             if (!hasAnimatedRef.current) {
               animateNumbers()
@@ -131,30 +110,29 @@ export default function StatsSection() {
         })
       },
       {
-        threshold: [0.5, 0.7, 0.9], // Multiple Schwellenwerte
+        threshold: [0.5, 0.7, 0.9],
         rootMargin: '0px'
       }
     )
 
-    observer.observe(container)
-
-    // Option 3: Time-based Fallback
-    // Falls der User sehr lange in der vorherigen Section bleibt
-    const checkVisibility = () => {
-      const rect = container.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-      const isInView = rect.top < windowHeight * 0.7 && rect.bottom > windowHeight * 0.3
-      
-      if (isInView && !hasAnimatedRef.current) {
-        console.log('Stats section in view - manual check')
-        animateNumbers()
-      }
+    if (container) {
+        observer.observe(container)
     }
 
-    // Check alle 500ms ob Section sichtbar ist
+    const checkVisibility = () => {
+        if (!container) return; // Sicherstellen, dass container existiert
+        const rect = container.getBoundingClientRect()
+        const windowHeight = window.innerHeight
+        const isInView = rect.top < windowHeight * 0.7 && rect.bottom > windowHeight * 0.3
+        
+        if (isInView && !hasAnimatedRef.current) {
+            console.log('Stats section in view - manual check')
+            animateNumbers()
+        }
+    }
+
     const intervalId = setInterval(checkVisibility, 500)
 
-    // Cleanup
     return () => {
       st.kill()
       observer.disconnect()
@@ -163,28 +141,8 @@ export default function StatsSection() {
     }
   }, [])
 
-  // Manual trigger Button für Notfälle
-  const manualTrigger = () => {
-    hasAnimatedRef.current = false
-    const container = containerRef.current
-    if (!container) return
-    
-    // Reset alle Zahlen
-    container.querySelectorAll('.stat-number').forEach(el => {
-      const startValue = parseFloat(el.getAttribute('data-start-value') || '0')
-      el.textContent = startValue.toLocaleString('de-DE')
-    })
-    
-    // Warte kurz, dann animiere
-    setTimeout(() => {
-      const section = sectionRef.current
-      if (!section) return
-      
-      const event = new Event('scroll')
-      window.dispatchEvent(event)
-      ScrollTrigger.refresh()
-    }, 100)
-  }
+  // Die manualTrigger Funktion wurde komplett entfernt
+  // const manualTrigger = () => { ... } // <--- ENTFERNT
 
   return (
     <section 
@@ -196,7 +154,8 @@ export default function StatsSection() {
         position: 'relative'
       }}
     >
-            
+      {/* Die Indikatoren und der Button wurden entfernt */}
+      
       <div className="section-header mb-16">
         <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
           <span className="title-line block">Career</span>
@@ -214,7 +173,7 @@ export default function StatsSection() {
                 data-target-value={stat.number}
                 data-start-value={stat.startValue}
               >
-                {stat.startValue}
+                {stat.startValue.toLocaleString('de-DE')}
               </span>
               <hr className="stat-separator w-12 h-0.5 bg-cyan-400 border-none mx-auto my-2" />
               <span className="stat-label text-sm md:text-base text-cyan-200 uppercase tracking-widest font-medium">
@@ -230,7 +189,7 @@ export default function StatsSection() {
             data-target-value={spotifyStats.number}
             data-start-value={spotifyStats.startValue}
           >
-            {spotifyStats.startValue}
+            {spotifyStats.startValue.toLocaleString('de-DE')}
           </span>
           <hr className="stat-separator w-16 h-0.5 bg-cyan-400 border-none mx-auto my-3" />
           <span className="stat-label text-lg md:text-xl text-cyan-200 uppercase tracking-widest font-medium">

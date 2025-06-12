@@ -1,6 +1,7 @@
+// src/components/BiographySection.tsx
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react' // useState wurde entfernt
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -12,9 +13,9 @@ if (typeof window !== 'undefined') {
 function BiographySection() {
   const sectionRef = useRef<HTMLElement>(null)
   const bioImageWrapperRef = useRef<HTMLDivElement>(null)
-  const [hasImageAnimated, setHasImageAnimated] = useState(false)
 
   useEffect(() => {
+    // Sicherstellen, dass die Code-Ausführung nur im Browser stattfindet
     if (typeof window === 'undefined') return
 
     const section = sectionRef.current
@@ -22,145 +23,90 @@ function BiographySection() {
 
     if (!section || !bioImageWrapper) return
 
-    // Intersection Observer für is-visible Klasse
-    const observerOptions = {
-      root: null,
-      rootMargin: '-10% 0px -10% 0px',
-      threshold: [0.1, 0.5, 0.8]
-    }
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (entry.intersectionRatio >= 0.1) {
-            section.classList.add('is-visible')
-          }
-        }
-      })
-    }
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions)
-    observer.observe(section)
-  
-    
-    // Bio Image Animation
+    // --- Bio Image Animation (Vereinfacht & Korrigiert) ---
     const bioImage = section.querySelector('.bio-image') as HTMLElement
-    if (bioImage && !hasImageAnimated) {
-      gsap.set(bioImage, { opacity: 0, scale: 0.95, y: 30 })
-      
+    if (bioImage) {
+      // GSAP-Animation, die dank "once: true" nur einmal ausgeführt wird.
+      // Der "hasImageAnimated"-State ist nicht mehr nötig.
       gsap.to(bioImage, {
         opacity: 1,
-        scale: 1,
         y: 0,
+        scale: 1,
         duration: 1.2,
         ease: "power3.out",
         scrollTrigger: {
           trigger: bioImage,
-          start: "top 95%",
-          once: true,
+          start: "top 85%", // Startet, wenn das Bild zu 85% im Viewport ist
+          once: true, // Stellt sicher, dass es nur einmal passiert
         },
-        onStart: () => {
-          setHasImageAnimated(true)
-        }
       })
     }
 
-    // Parallax für Profilbild
-    let parallaxAnimationId: number | null = null
+    // --- Parallax-Effekt für das Profilbild ---
     const parallaxIntensityImage = 10
     const liftAmountImage = 10
-    const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches
 
-    const handleMouseMove = (e: Event) => {
-      if (isTouchDevice) return;
-      const mouseEvent = e as MouseEvent;
-      if (!section.classList.contains('is-visible')) return
-      
-      if (parallaxAnimationId) return
-      parallaxAnimationId = requestAnimationFrame(() => {
-        const rect = bioImageWrapper.getBoundingClientRect()
-        const mouseXpercent = ((mouseEvent.clientX - rect.left - rect.width / 2) / (rect.width / 2))
-        const mouseYpercent = ((mouseEvent.clientY - rect.top - rect.height / 2) / (rect.height / 2))
-        const rotateY = mouseXpercent * parallaxIntensityImage
-        const rotateX = -mouseYpercent * parallaxIntensityImage * 0.6
-        bioImageWrapper.style.transition = 'transform 0.05s linear'
-        bioImageWrapper.style.transform = `rotateX(${rotateX - 8}deg) rotateY(${rotateY}deg) translateZ(${liftAmountImage}px)`
-        parallaxAnimationId = null
-      })
-    }
-
-    const handleMouseLeave = () => {
-      if (isTouchDevice) return;
-      if (parallaxAnimationId) {
-        cancelAnimationFrame(parallaxAnimationId)
-        parallaxAnimationId = null
+    // Wir fügen die Event-Listener nur auf Nicht-Touch-Geräten hinzu
+    if (!isTouchDevice) {
+      const handleMouseMove = (e: MouseEvent) => {
+        requestAnimationFrame(() => {
+          if (!bioImageWrapper) return;
+          const rect = bioImageWrapper.getBoundingClientRect()
+          const mouseXpercent = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2))
+          const mouseYpercent = ((e.clientY - rect.top - rect.height / 2) / (rect.height / 2))
+          
+          const rotateY = mouseXpercent * parallaxIntensityImage
+          const rotateX = -mouseYpercent * parallaxIntensityImage * 0.6
+          
+          gsap.to(bioImageWrapper, {
+            duration: 0.5,
+            ease: 'power1.out',
+            transform: `rotateX(${rotateX - 8}deg) rotateY(${rotateY}deg) translateZ(${liftAmountImage}px)`
+          });
+        })
       }
-      bioImageWrapper.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      bioImageWrapper.style.transform = 'rotateX(-8deg) rotateY(0deg) translateZ(0px)'
-    }
 
-    if (bioImageWrapper && !isTouchDevice) {
+      const handleMouseLeave = () => {
+        gsap.to(bioImageWrapper, {
+          duration: 0.8,
+          ease: 'elastic.out(1, 0.5)',
+          transform: 'rotateX(-8deg) rotateY(0deg) translateZ(0px)'
+        });
+      }
+
       bioImageWrapper.addEventListener('mousemove', handleMouseMove)
       bioImageWrapper.addEventListener('mouseleave', handleMouseLeave)
-    }
+      
+      // Initial-Rotation setzen
+      gsap.set(bioImageWrapper, { transform: 'rotateX(-8deg) rotateY(0deg) translateZ(0px)' });
 
-    // Cleanup
-    return () => {
-      observer.disconnect()
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
-      if (bioImageWrapper && !isTouchDevice) {
+      // Cleanup-Funktion
+      return () => {
         bioImageWrapper.removeEventListener('mousemove', handleMouseMove)
         bioImageWrapper.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
-    // highlight-start
-  }, []) // KORREKTUR: Array wieder leer, damit der Effekt nur einmal läuft.
-    // highlight-end
+  }, []) // Leeres Array ist jetzt korrekt, da keine externen Abhängigkeiten mehr bestehen.
 
-  // ... der Rest der Komponente (return statement) bleibt gleich
   return (
     <section 
       ref={sectionRef}
-      id="about-me" 
+      id="ueber-mich" // ID war "about-me", aber in der CSS ist sie "#ueber-mich"
       className="page-section"
-      style={{
-        background: 'transparent',
-        position: 'relative'
-      }}
     >
       <div className="section-header">
         <h2 className="section-title">
           <span className="title-line">The</span>
-          <span className="title-line">journey</span>
+          <span className="title-line">Journey</span>
         </h2>
         <div className="title-underline"></div>
       </div>
       
       <div className="bio-content">
-        <div 
-          ref={bioImageWrapperRef}
-          className="bio-image-wrapper"
-          style={{ 
-            perspective: '800px',
-            position: 'relative',
-            width: '100%',
-            maxWidth: '320px',
-            margin: '0 auto',
-            willChange: 'transform'
-          }}
-        >
-          <div 
-            className="bio-image"
-            style={{
-              position: 'relative',
-              borderRadius: '10px',
-              overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08)',
-              opacity: 0,
-              transform: 'translateY(50px) rotateX(10deg) scale(0.95)',
-              willChange: 'transform, opacity'
-            }}
-          >
+        {/* Die Inline-Styles wurden entfernt und sind jetzt im CSS */}
+        <div ref={bioImageWrapperRef} className="bio-image-wrapper">
+          <div className="bio-image">
             <Image
               src="/assets/images/Profilbild1.jpg"
               alt="Foto von DJ ARADO"
@@ -168,35 +114,12 @@ function BiographySection() {
               height={400}
               className="bio-image-img"
               priority
-              style={{ 
-                width: '100%', 
-                height: 'auto', 
-                display: 'block',
-                transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                willChange: 'transform'
-              }}
             />
-            <div 
-              className="image-overlay"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(135deg, rgba(64, 224, 208, 0.05) 0%, transparent 35%, transparent 65%, rgba(255, 71, 87, 0.05) 100%)',
-                opacity: 0.5,
-                transition: 'opacity 0.4s ease',
-                willChange: 'opacity'
-              }}
-            ></div>
+            <div className="image-overlay"></div>
           </div>
         </div>
         
-        <div 
-          className="bio-text"
-          style={{ color: '#FFFFFF' }} 
-        >
+        <div className="bio-text">
           <p className="bio-paragraph">
             From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that&apos;s how Arado&apos;s story is best summed up. With the spotlight getting brighter for this talented German export, he&apos;s already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D&apos;Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
           </p>
