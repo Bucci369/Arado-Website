@@ -1,7 +1,7 @@
 // src/app/components/StatsSection.tsx
 'use client'
 
-import { useEffect, useRef } from 'react' // useState wurde entfernt
+import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -12,7 +12,6 @@ if (typeof window !== 'undefined') {
 export default function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  // const [isVisible, setIsVisible] = useState(false) // <--- ENTFERNT
   const hasAnimatedRef = useRef(false)
 
   const stats = [
@@ -87,62 +86,44 @@ export default function StatsSection() {
       end: "bottom 30%",
       markers: false,
       onEnter: () => {
-        console.log('Stats section entered viewport')
-        // setIsVisible(true) // <--- ENTFERNT
         animateNumbers()
       },
       onLeaveBack: () => {
-        // setIsVisible(false) // <--- ENTFERNT
+        // Optional: Animation zurücksetzen, wenn man wieder hochscrollt
+        // hasAnimatedRef.current = false;
+        // // Hier könnte man die Zahlen auf den Startwert zurücksetzen, falls gewünscht
       },
       once: false
     })
-    
-    // Der IntersectionObserver kann bleiben oder auch entfernt werden, da ScrollTrigger die Hauptlogik ist.
+
+    // Der IntersectionObserver ist redundant, da ScrollTrigger die Logik bereits abdeckt.
+    // Ich lasse ihn hier auskommentiert, um den Code zu bereinigen.
+    /*
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            console.log('Stats section 50% visible')
             if (!hasAnimatedRef.current) {
               animateNumbers()
             }
           }
         })
       },
-      {
-        threshold: [0.5, 0.7, 0.9],
-        rootMargin: '0px'
-      }
+      { threshold: [0.5, 0.7, 0.9], rootMargin: '0px' }
     )
+    if (container) { observer.observe(container) }
+    */
 
-    if (container) {
-        observer.observe(container)
-    }
-
-    const checkVisibility = () => {
-        if (!container) return; // Sicherstellen, dass container existiert
-        const rect = container.getBoundingClientRect()
-        const windowHeight = window.innerHeight
-        const isInView = rect.top < windowHeight * 0.7 && rect.bottom > windowHeight * 0.3
-        
-        if (isInView && !hasAnimatedRef.current) {
-            console.log('Stats section in view - manual check')
-            animateNumbers()
-        }
-    }
-
-    const intervalId = setInterval(checkVisibility, 500)
+    // Der Intervall-Check ist ebenfalls redundant zu ScrollTrigger.
+    // clearInterval(intervalId)
 
     return () => {
       st.kill()
-      observer.disconnect()
-      clearInterval(intervalId)
+      // observer.disconnect()
+      // clearInterval(intervalId)
       gsap.killTweensOf('.stat-number')
     }
   }, [])
-
-  // Die manualTrigger Funktion wurde komplett entfernt
-  // const manualTrigger = () => { ... } // <--- ENTFERNT
 
   return (
     <section 
@@ -154,8 +135,6 @@ export default function StatsSection() {
         position: 'relative'
       }}
     >
-      {/* Die Indikatoren und der Button wurden entfernt */}
-      
       <div className="section-header mb-16">
         <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
           <span className="title-line block">Career</span>
@@ -173,7 +152,8 @@ export default function StatsSection() {
                 data-target-value={stat.number}
                 data-start-value={stat.startValue}
               >
-                {stat.startValue.toLocaleString('de-DE')}
+                {/* KORREKTUR: Gib nur die rohe Zahl aus */}
+                {stat.startValue}
               </span>
               <hr className="stat-separator w-12 h-0.5 bg-cyan-400 border-none mx-auto my-2" />
               <span className="stat-label text-sm md:text-base text-cyan-200 uppercase tracking-widest font-medium">
@@ -189,7 +169,8 @@ export default function StatsSection() {
             data-target-value={spotifyStats.number}
             data-start-value={spotifyStats.startValue}
           >
-            {spotifyStats.startValue.toLocaleString('de-DE')}
+            {/* KORREKTUR: Gib nur die rohe Zahl aus */}
+            {spotifyStats.startValue}
           </span>
           <hr className="stat-separator w-16 h-0.5 bg-cyan-400 border-none mx-auto my-3" />
           <span className="stat-label text-lg md:text-xl text-cyan-200 uppercase tracking-widest font-medium">
