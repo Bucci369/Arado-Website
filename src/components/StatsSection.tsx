@@ -103,7 +103,7 @@ export default function StatsSection() {
     // Option 1: ScrollTrigger mit mehreren Trigger-Punkten
     const st = ScrollTrigger.create({
       trigger: container,
-      start: "top 70%", // Startet erst wenn 70% der Container im View ist
+      start: "top 95%", // Startet erst wenn 70% der Container im View ist
       end: "bottom 30%",
       markers: false, // Setze auf true zum Debuggen
       onEnter: () => {
@@ -196,21 +196,7 @@ export default function StatsSection() {
         position: 'relative'
       }}
     >
-      {/* Trigger-Indikator für Debugging */}
-      <div className={`absolute top-4 left-4 px-3 py-1 rounded text-xs transition-all ${
-        isVisible ? 'bg-green-500' : 'bg-red-500'
-      }`}>
-        {isVisible ? 'Animation aktiv' : 'Warte auf Trigger'}
-      </div>
-
-      {/* Manual Trigger Button */}
-      <button 
-        onClick={manualTrigger}
-        className="absolute top-4 right-4 bg-cyan-500 text-white px-4 py-2 rounded hover:bg-cyan-600 transition-colors text-sm"
-      >
-        Animation starten
-      </button>
-
+            
       <div className="section-header mb-16">
         <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
           <span className="title-line block">Career</span>
