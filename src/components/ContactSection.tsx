@@ -10,13 +10,7 @@ if (typeof window !== 'undefined') {
 
 export default function ContactSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  // VORHER: const [ setHoveredCard] = useState<string | null>(null)
-  // AKTION: 'hoveredCard' wurde entfernt, da es nicht verwendet wird.
-  // Das 'setHoveredCard' wird weiterhin vom Linter als "never used" markiert,
-  // wenn es direkt im useState-Array dekonstruiert wird.
-  // Da die onMouseEnter/onMouseLeave Events keine state-Änderung auslösen müssen,
-  // wenn der Wert nicht verwendet wird, kann der useState-Hook ganz entfernt werden.
-  // Wenn du in Zukunft eine Hover-Logik brauchst, füge den useState-Hook wieder hinzu.
+ 
   
   useEffect(() => {
     if (!sectionRef.current) return
@@ -26,7 +20,6 @@ export default function ContactSection() {
       gsap.from('.contact-card', {
         y: 100,
         opacity: 0,
-        // rotationY: -30, <--- Diese Zeile wurde entfernt, um die Neigung zu entfernen
         stagger: 0.2,
         duration: 1,
         ease: 'power3.out',
@@ -195,10 +188,7 @@ export default function ContactSection() {
             <div
               key={method.id}
               className="contact-card"
-              // AKTION: onMouseEnter/onMouseLeave Events entfernt, da `setHoveredCard` nicht genutzt wird.
-              // onMouseEnter={() => (method.id)}
-              // onMouseLeave={() => (null)}
-              style={{
+                style={{
                 '--card-color': method.color,
                 '--card-glow': method.glow
               } as React.CSSProperties}
@@ -218,7 +208,6 @@ export default function ContactSection() {
 
         {/* Social Links Section */}
         <div className="social-links">
-          <h3 className="social-title">Follow My Journey</h3>
           <div className="social-grid">
             {socialLinks.map((link) => (
               <a
@@ -240,7 +229,7 @@ export default function ContactSection() {
         {/* Call to Action */}
         <div className="contact-cta">
           <p className="cta-text">Ready for an unforgettable night?</p>
-          <h3 className="cta-title">Let&apos;s create sonic memories together</h3> {/* AKTION: Apostroph escaped */}
+          
         </div>
       </div>
 

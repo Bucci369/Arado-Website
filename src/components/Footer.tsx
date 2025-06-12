@@ -140,40 +140,11 @@ export default function Footer() {
       <div className="footer-content">
         {/* Logo/Brand */}
         <div className="footer-brand">
-          <h3 className="footer-logo">DJ ARADO</h3>
+          <h3 className="footer-logo">ARADO</h3>
           <p className="footer-tagline">Deep & Tech House Artist</p>
         </div>
 
-        {/* Social Links */}
-        <div className="footer-social">
-          {socialLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="footer-social-link"
-              aria-label={link.name}
-              // Hier die Farbe als CSS-Variable übergeben
-              style={{ '--social-color': link.color } as React.CSSProperties}
-            >
-              <span className="social-icon">{link.icon}</span>
-              <span className="social-tooltip">{link.name}</span>
-            </a>
-          ))}
-        </div>
-
-        {/* Links */}
-        <nav className="footer-nav">
-          <a href="/legal-notice" className="footer-link">
-            <span>Legal Notice</span>
-          </a>
-          <span className="footer-separator">•</span>
-          <a href="/privacy-policy" className="footer-link">
-            <span>Privacy Policy</span>
-          </a>
-        </nav>
-
+                
         {/* Copyright */}
         <div className="footer-copyright">
           <p>© {currentYear} DJ ARADO</p>
@@ -438,15 +409,7 @@ export default function Footer() {
             font-size: 2rem;
           }
 
-          .footer-social {
-            gap: 1rem;
-          }
-
-          .footer-social-link {
-            width: 45px;
-            height: 45px;
-          }
-
+          
           .footer-nav {
             flex-direction: column;
             gap: 1rem;
