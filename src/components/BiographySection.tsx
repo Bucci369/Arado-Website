@@ -1,4 +1,3 @@
-// src/app/components/BiographySection.tsx
 'use client'
 
 import { useEffect, useRef } from 'react'
@@ -10,17 +9,15 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
-export default function BiographySection() {
+function BiographySection() {
   const sectionRef = useRef<HTMLElement>(null)
   const bioImageWrapperRef = useRef<HTMLDivElement>(null)
-  const particleContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
 
     const section = sectionRef.current
     const bioImageWrapper = bioImageWrapperRef.current
-    const particleContainer = particleContainerRef.current
 
     if (!section || !bioImageWrapper) return
 
@@ -37,18 +34,6 @@ export default function BiographySection() {
           if (entry.intersectionRatio >= 0.1) {
             section.classList.add('is-visible')
           }
-
-          // Partikel initialisieren
-          if (entry.intersectionRatio >= 0.5 && particleContainer && !particleContainer.dataset.initialized) {
-            // AKTION: Verzögerung für Partikel auf Mobilgeräten reduzieren oder entfernen
-            const isMobile = window.innerWidth <= 768; // Beispiel-Breakpoint
-            const particleDelay = isMobile ? 100 : 200; // Kürzere Verzögerung auf Mobilgeräten
-
-            setTimeout(() => {
-              initUeberMichParticles(particleContainer, isMobile); // isMobile übergeben
-              particleContainer.dataset.initialized = 'true'
-            }, particleDelay)
-          }
         }
       })
     }
@@ -57,69 +42,53 @@ export default function BiographySection() {
     observer.observe(section)
   
     
-    // Bio Image Animation - basierend auf alter Website
-    const bioImage = section.querySelector('.bio-image')
+    // Bio Image Animation - VERBESSERT
+    const bioImage = section.querySelector('.bio-image') as HTMLElement
     if (bioImage) {
-      gsap.fromTo(bioImage,
-        { 
-          opacity: 0, 
-          scale: 0.95, 
-          rotateY: -15, 
-          rotateX: 10,
-          y: 50 
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          rotateY: 0,
-          rotateX: 0,
-          y: 0,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: bioImage,
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
+      gsap.set(bioImage, { opacity: 0, scale: 0.95, y: 30 })
+      
+      gsap.to(bioImage, {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: bioImage,
+          start: "top 95%",
+          toggleActions: "play none none reverse"
         }
-      )
+      })
     }
 
-    // Bio Paragraphs Animation
+    // Bio Paragraphs Animation - VERBESSERT
     const bioParagraphs = section.querySelectorAll('.bio-paragraph')
     bioParagraphs.forEach((paragraph, index) => {
-      gsap.fromTo(paragraph,
-        { 
-          opacity: 0, 
-          y: 30, 
-          x: 20 
-        },
-        {
-          opacity: 1,
-          y: 0,
-          x: 0,
-          duration: 0.8,
-          delay: index * 0.2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: paragraph,
-            start: "top 90%",
-            toggleActions: "play none none reverse"
-          }
+      const el = paragraph as HTMLElement
+      gsap.set(el, { opacity: 0, y: 15 })
+      
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: 1.0,
+        delay: index * 0.2,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 95%",
+          toggleActions: "play none none reverse"
         }
-      )
+      })
     })
 
     // Parallax für Profilbild
     let parallaxAnimationId: number | null = null
     const parallaxIntensityImage = 10
     const liftAmountImage = 10
-
-    // AKTION: Parallax für Mobilgeräte deaktivieren oder reduzieren
     const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
     const handleMouseMove = (e: Event) => {
-      if (isTouchDevice) return; // Auf Touch-Geräten deaktivieren
+      if (isTouchDevice) return;
       const mouseEvent = e as MouseEvent;
       if (!section.classList.contains('is-visible')) return
       
@@ -137,7 +106,7 @@ export default function BiographySection() {
     }
 
     const handleMouseLeave = () => {
-      if (isTouchDevice) return; // Auf Touch-Geräten deaktivieren
+      if (isTouchDevice) return;
       if (parallaxAnimationId) {
         cancelAnimationFrame(parallaxAnimationId)
         parallaxAnimationId = null
@@ -146,8 +115,7 @@ export default function BiographySection() {
       bioImageWrapper.style.transform = 'rotateX(-8deg) rotateY(0deg) translateZ(0px)'
     }
 
-    // Mouse Parallax nur auf dem Bild selbst
-    if (bioImageWrapper && !isTouchDevice) { // Nur hinzufügen, wenn es kein Touch-Gerät ist
+    if (bioImageWrapper && !isTouchDevice) {
       bioImageWrapper.addEventListener('mousemove', handleMouseMove)
       bioImageWrapper.addEventListener('mouseleave', handleMouseLeave)
     }
@@ -156,69 +124,12 @@ export default function BiographySection() {
     return () => {
       observer.disconnect()
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
-      if (bioImageWrapper && !isTouchDevice) { // Nur entfernen, wenn es hinzugefügt wurde
+      if (bioImageWrapper && !isTouchDevice) {
         bioImageWrapper.removeEventListener('mousemove', handleMouseMove)
         bioImageWrapper.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
-    
-    // Partikel-Funktion
-    // AKTION: Parameter für Partikelanzahl/Größe basierend auf Mobilgeräten
-    const initUeberMichParticles = (container: HTMLDivElement, isMobile: boolean) => {
-      const particleCount = isMobile ? 10 : 20; // Weniger Partikel auf Mobilgeräten
-      const minSize = isMobile ? 1 : 2;
-      const maxSize = isMobile ? 2 : 3;
-      createGenericParticles(container, particleCount, 'particle', minSize, maxSize)
-    }
   }, [])
-
-  // AKTION: Parameter für Partikelgröße hinzugefügt
-  const createGenericParticles = (
-    container: HTMLDivElement, 
-    count: number, 
-    particleClass: string,
-    minSize: number = 1, // Standardwerte, falls nicht übergeben
-    maxSize: number = 3
-  ) => {
-    const fragment = document.createDocumentFragment()
-    const defaults = { 
-      minDuration: 4, 
-      maxDuration: 8, 
-      minDelay: 0, 
-      maxDelay: 3, 
-      minSize: minSize, // Nutze die übergebenen Werte
-      maxSize: maxSize  // Nutze die übergebenen Werte
-    }
-    
-    for (let i = 0; i < count; i++) {
-      const particle = document.createElement('div')
-      particle.classList.add(particleClass)
-      const size = defaults.minSize + Math.random() * (defaults.maxSize - defaults.minSize)
-      
-      let cssProps = `
-        width: ${size}px; 
-        height: ${size}px; 
-        left: ${Math.random() * 100}%; 
-        top: ${Math.random() * 100}%; 
-        animation-duration: ${defaults.minDuration + Math.random() * (defaults.maxDuration - defaults.minDuration)}s; 
-        animation-delay: ${defaults.minDelay + Math.random() * (defaults.maxDelay - defaults.minDelay)}s; 
-        will-change: transform, opacity;
-      `
-      
-      if (particleClass === 'particle') { 
-        cssProps += `
-          background: rgba(64, 224, 208, ${0.4 + Math.random() * 0.4}); 
-          box-shadow: 0 0 ${Math.random() * 8 + 2}px rgba(64, 224, 208, ${0.3 + Math.random() * 0.3});
-        `
-      }
-      
-      particle.style.cssText = cssProps
-      fragment.appendChild(particle)
-    }
-    
-    container.innerHTML = ''
-    container.appendChild(fragment)
-  }
 
   return (
     <section 
@@ -243,7 +154,6 @@ export default function BiographySection() {
         <div 
           ref={bioImageWrapperRef}
           className="bio-image-wrapper"
-          // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können, aber die CSS-Klassen definieren Basis
           style={{ 
             perspective: '800px',
             position: 'relative',
@@ -255,7 +165,6 @@ export default function BiographySection() {
         >
           <div 
             className="bio-image"
-            // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können
             style={{
               position: 'relative',
               borderRadius: '10px',
@@ -273,7 +182,6 @@ export default function BiographySection() {
               height={400}
               className="bio-image-img"
               priority
-              // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können
               style={{ 
                 width: '100%', 
                 height: 'auto', 
@@ -284,7 +192,6 @@ export default function BiographySection() {
             />
             <div 
               className="image-overlay"
-              // Inline-Stile bleiben, da sie von GSAP/JS überschrieben werden können
               style={{
                 position: 'absolute',
                 top: 0,
@@ -300,7 +207,10 @@ export default function BiographySection() {
           </div>
         </div>
         
-        <div className="bio-text">
+        <div 
+           
+          style={{ color: '#FFFFFF' }} 
+        >
           <p className="bio-paragraph">
             From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that&apos;s how Arado&apos;s story is best summed up. With the spotlight getting brighter for this talented German export, he&apos;s already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D&apos;Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
           </p>
@@ -318,3 +228,5 @@ export default function BiographySection() {
     </section>
   )
 }
+
+export default BiographySection

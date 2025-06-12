@@ -981,3 +981,7 @@ footer {
     font-size: clamp(1rem, 5vw, 1.5rem); /* Noch kleinerer Slogan */
   }
 }
+
+.bio-paragraph {
+  color: #FFFFFF !important;
+}
