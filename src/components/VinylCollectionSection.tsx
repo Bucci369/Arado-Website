@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion' // KORREKTUR 1: useMotionValue entfernt
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -11,7 +11,6 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
-// Hilfsfunktion, um die Standardwerte für den Server zu bekommen
 const getServerSideStyles = () => ({
   containerMaxHeight: '600px',
   vinylSize: '200px',
@@ -21,8 +20,6 @@ const getServerSideStyles = () => ({
 export default function VinylCollectionSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
-  
-  // NEU: State für dynamische Styles, initialisiert mit Server-Werten
   const [dynamicStyles, setDynamicStyles] = useState(getServerSideStyles());
 
   const { scrollYProgress } = useScroll({
@@ -45,7 +42,6 @@ export default function VinylCollectionSection() {
     { src: '/assets/images/IMG_1952.avif', alt: 'Vinyl Cover 11', delay: 0.55 },
   ];
   
-  // NEU: useEffect, um die Styles auf dem Client zu aktualisieren
   useEffect(() => {
     const handleResize = () => {
       const vw = window.innerWidth;
@@ -68,16 +64,10 @@ export default function VinylCollectionSection() {
         setDynamicStyles(getServerSideStyles());
       }
     };
-
-    // Führe die Funktion einmal beim Laden aus
     handleResize();
-
-    // Füge einen Event-Listener hinzu, um auf Größenänderungen zu reagieren
     window.addEventListener('resize', handleResize);
-
-    // Cleanup-Funktion
     return () => window.removeEventListener('resize', handleResize);
-  }, []); // Leeres Array, damit dieser Hook nur auf dem Client läuft
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -98,13 +88,12 @@ export default function VinylCollectionSection() {
   }, []);
 
   const getCirclePosition = (index: number, total: number) => {
-    // Diese Funktion kann window sicher verwenden, da sie von der Render-Logik getrennt ist
-    // die jetzt den State verwendet.
     const vw = typeof window !== 'undefined' ? window.innerWidth : 1024;
     const isMobile = vw <= 480;
     const isTablet = vw <= 768;
     
-    let radius = isMobile ? vw * 0.35 : isTablet ? vw * 0.28 : Math.min(350, vw * 0.25);
+    // KORREKTUR 2: let zu const geändert
+    const radius = isMobile ? vw * 0.35 : isTablet ? vw * 0.28 : Math.min(350, vw * 0.25);
     const yMultiplier = isMobile ? 0.3 : isTablet ? 0.4 : 0.5;
     const zBase = isMobile ? 10 : isTablet ? 30 : 50;
     const zRange = isMobile ? 20 : isTablet ? 50 : 80;
@@ -115,7 +104,6 @@ export default function VinylCollectionSection() {
     const z = Math.cos(angle * 2) * zRange + zBase; 
     return { x, y, z, rotate: 0 } 
   };
-
 
   return (
     <section
@@ -138,7 +126,14 @@ export default function VinylCollectionSection() {
         className="vinyl-bg-waves"
         style={{ y: backgroundY, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: 0.1 }}
       >
-        {/* ... Wellen-Animation ... */}
+         {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            style={{ position: 'absolute', width: '200%', height: '200%', left: '-50%', top: '-50%', background: `radial-gradient(circle, transparent 0%, rgba(255, 255, 255, ${0.05 - i * 0.01}) 40%, transparent 70%)` }}
+            animate={{ scale: [1 + i * 0.2, 2 + i * 0.2, 1 + i * 0.2], rotate: [0, 180, 360] }}
+            transition={{ duration: 20 + i * 5, repeat: Infinity, ease: "linear" }}
+          />
+        ))}
       </motion.div>
 
       <div className="section-header">
@@ -159,7 +154,7 @@ export default function VinylCollectionSection() {
           display: 'flex', 
           justifyContent: 'center', 
           alignItems: 'center',
-          maxHeight: dynamicStyles.containerMaxHeight, // <-- Wert aus State verwenden
+          maxHeight: dynamicStyles.containerMaxHeight,
         }}
       >
         {vinylCovers.map((vinyl, index) => {
@@ -173,15 +168,15 @@ export default function VinylCollectionSection() {
               transition={{ duration: 2.5, delay: vinyl.delay * 2, type: "spring", stiffness: 40, damping: 15, scale: { duration: 0.3 } }}
               style={{ 
                 position: 'absolute', 
-                width: dynamicStyles.vinylSize, // <-- Wert aus State verwenden
-                height: dynamicStyles.vinylSize, // <-- Wert aus State verwenden
+                width: dynamicStyles.vinylSize,
+                height: dynamicStyles.vinylSize,
                 borderRadius: '50%', 
                 overflow: 'hidden', 
                 cursor: 'default', 
                 left: '50%', 
                 top: '50%', 
-                marginLeft: dynamicStyles.vinylMargin, // <-- Wert aus State verwenden
-                marginTop: dynamicStyles.vinylMargin, // <-- Wert aus State verwenden
+                marginLeft: dynamicStyles.vinylMargin,
+                marginTop: dynamicStyles.vinylMargin,
                 transformStyle: 'preserve-3d', 
                 boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.1)', 
                 border: '4px solid #1a1a1a', 
@@ -192,7 +187,9 @@ export default function VinylCollectionSection() {
               <motion.div style={{ width: '100%', height: '100%', position: 'relative' }} animate={{ rotateZ: 360 }} transition={{ duration: 60, repeat: Infinity, ease: "linear" }}>
                 <Image src={vinyl.src} alt={vinyl.alt} fill style={{ objectFit: 'cover' }} sizes={dynamicStyles.vinylSize} />
               </motion.div>
-              {/* ... Vinyl-Label in der Mitte ... */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%', height: '60%', background: 'radial-gradient(circle, #000 45%, #1a1a1a 60%, #333 100%)', borderRadius: '50%', border: '2px solid #222', zIndex: 10, boxShadow: 'inset 0 0 15px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.5)' }}>
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '20%', height: '20%', background: '#000', borderRadius: '50%', border: '1px solid #111' }} />
+              </div>
             </motion.div>
           )
         })}
