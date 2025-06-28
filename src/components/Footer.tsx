@@ -30,16 +30,28 @@ export default function Footer() {
         }
       })
 
+<<<<<<< HEAD
       // Pulse animation for orbs - subtiler
       gsap.to('.footer-orb', {
         scale: 1.1, // Reduziert von 1.2 auf 1.1
         opacity: 0.3, // Reduziert von 0.6 auf 0.3
         duration: 'random(4, 6)', // Verlangsamung von 3-5s auf 4-6s
+=======
+      // Pulse animation for orbs
+      gsap.to('.footer-orb', {
+        scale: 1.2,
+        opacity: 0.6,
+        duration: 'random(3, 5)',
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         repeat: -1,
         yoyo: true,
         ease: 'power1.inOut',
         stagger: {
+<<<<<<< HEAD
           each: 0.8, // Verlangsamung von 0.5s auf 0.8s
+=======
+          each: 0.5,
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
           from: 'random'
         }
       })
@@ -103,6 +115,7 @@ export default function Footer() {
       <style jsx>{`
         .cosmic-footer {
           position: relative;
+<<<<<<< HEAD
           background: linear-gradient(180deg, 
             transparent 0%, 
             rgba(0, 0, 0, 0.1) 15%, 
@@ -116,6 +129,12 @@ export default function Footer() {
           margin-top: 0; /* Kein zusätzlicher Margin */
           width: 100vw; /* Volle Viewport-Breite */
           margin-left: calc(-50vw + 50%); /* Zentriert über volle Breite */
+=======
+          background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 50%, #000 100%);
+          padding: 4rem 2rem 2rem;
+          overflow: hidden;
+          margin-top: 5rem;
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         }
 
         .footer-wave {
@@ -125,7 +144,10 @@ export default function Footer() {
           width: 100%;
           height: 40px;
           overflow: hidden;
+<<<<<<< HEAD
           z-index: 4; /* Höchste Priorität für die Wave */
+=======
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         }
 
         .footer-wave svg {
@@ -141,12 +163,16 @@ export default function Footer() {
           height: 100%;
           overflow: hidden;
           pointer-events: none;
+<<<<<<< HEAD
           z-index: 2; /* Über dem Overlay, aber unter dem Content */
+=======
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         }
 
         .footer-orb {
           position: absolute;
           border-radius: 50%;
+<<<<<<< HEAD
           filter: blur(40px); /* Reduziert von 80px auf 40px */
           opacity: 0.2; /* Reduziert von 0.3 auf 0.2 */
         }
@@ -172,16 +198,49 @@ export default function Footer() {
           height: 180px;
           background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%); /* Reduzierte Opacity */
           bottom: -90px; /* Angepasst für kleinere Orb */
+=======
+          filter: blur(80px);
+          opacity: 0.3;
+        }
+
+        .footer-orb-1 {
+          width: 300px;
+          height: 300px;
+          background: radial-gradient(circle, rgba(147, 51, 234, 0.6) 0%, transparent 70%);
+          top: -150px;
+          left: -150px;
+        }
+
+        .footer-orb-2 {
+          width: 400px;
+          height: 400px;
+          background: radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, transparent 70%);
+          top: -200px;
+          right: -200px;
+        }
+
+        .footer-orb-3 {
+          width: 250px;
+          height: 250px;
+          background: radial-gradient(circle, rgba(236, 72, 153, 0.6) 0%, transparent 70%);
+          bottom: -125px;
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
           left: 50%;
           transform: translateX(-50%);
         }
 
         .footer-content {
           position: relative;
+<<<<<<< HEAD
           z-index: 3; /* Erhöht von 2 auf 3, damit Content über dem neuen Overlay liegt */
           max-width: 1200px;
           margin: 0 auto;
           padding: 0 2rem; /* Padding hier hinzugefügt für Inhalt */
+=======
+          z-index: 2;
+          max-width: 1200px;
+          margin: 0 auto;
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -204,7 +263,11 @@ export default function Footer() {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+<<<<<<< HEAD
           filter: drop-shadow(0 0 10px rgba(64, 224, 208, 0.3)); /* Reduziert von 20px auf 10px und Opacity von 0.5 auf 0.3 */
+=======
+          filter: drop-shadow(0 0 20px rgba(64, 224, 208, 0.5));
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         }
 
         .footer-tagline {

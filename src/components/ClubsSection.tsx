@@ -21,6 +21,7 @@ export default function ClubsSection() {
 
   useEffect(() => {
     const sectionElement = sectionRef.current;
+<<<<<<< HEAD
     const listContainer = listContainerRef.current;
     const listItems = listContainer?.querySelectorAll('.zoom-list-item');
 
@@ -86,6 +87,29 @@ export default function ClubsSection() {
           }
         });
       };
+=======
+    const listItems = listContainerRef.current?.querySelectorAll('.zoom-list-item');
+
+    if (sectionElement && listItems && listItems.length > 0) {
+      gsap.fromTo(listItems, 
+        { // Start-Zustand: Unsichtbar und leicht verkleinert
+          opacity: 0,
+          scale: 0.8 
+        }, 
+        { // End-Zustand: Voll sichtbar und in normaler Größe
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          ease: 'power3.out',
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: listContainerRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          }
+        }
+      );
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
     }
   }, []);
 
@@ -109,7 +133,11 @@ export default function ClubsSection() {
           {venues.map((venue, index) => (
             <li 
               key={index}
+<<<<<<< HEAD
               className="zoom-list-item text-2xl md:text-3xl lg:text-4xl font-semibold text-white py-4 mb-2 will-change-transform cursor-pointer hover:text-cyan-200 transition-colors duration-300"
+=======
+              className="zoom-list-item text-2xl md:text-3xl lg:text-4xl font-semibold text-white py-4 mb-2 will-change-[opacity,transform] cursor-pointer hover:text-cyan-200 transition-colors duration-300"
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
             >
               {venue}
             </li>

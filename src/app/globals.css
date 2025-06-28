@@ -665,7 +665,11 @@ body::after {
 .social-link { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease; }
 .social-link:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
 .social-link.spotify, .social-link.instagram, .social-link.soundcloud, .social-link.youtube { background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.3); }
+<<<<<<< HEAD
 .social-link svg { width: 30px; height: 30px; color: #ffffff; stroke: #ffffff; }
+=======
+.social-link svg { width: 24px; height: 24px; color: #ffffff; }
+>>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
 .contact-form { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 2.5rem; opacity: 0; transform: translateX(50px); will-change: opacity, transform; }
 .form-title { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 700; color: #ffffff; margin-bottom: 2rem; text-align: center; }
 .booking-form { display: flex; flex-direction: column; gap: 1.5rem; }
