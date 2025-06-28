@@ -1,0 +1,16 @@
+# netlify.toml
+
+[build]
+  # Befehl, den Netlify ausführen soll, um deine Seite zu bauen.
+  # "npm run build" verwendet das "build"-Skript aus deiner package.json.
+  command = "npm run build"
+
+  # Verzeichnis, das Netlify nach dem Build veröffentlichen soll.
+  # Für Next.js (ohne 'output: "export"') ist dies der Ordner ".next".
+  publish = ".next"
+
+# Dieser Abschnitt stellt sicher, dass das offizielle Next.js-Plugin
+# von Netlify verwendet wird. Es ist entscheidend für die korrekte
+# Funktionsweise von Features wie SSR, ISR, API-Routen, Middleware etc.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
