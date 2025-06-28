@@ -69,7 +69,6 @@ export default function StatsSection() {
             }
           })
 
-<<<<<<< HEAD
           // Smooth fade-in statt harsh opacity change
           gsap.fromTo(item, {
             opacity: 1, // Start normal sichtbar
@@ -77,11 +76,6 @@ export default function StatsSection() {
           }, {
             opacity: 1, // Bleibt sichtbar
             y: 0,       // Slide to position
-=======
-          gsap.from(item, {
-            opacity: 0,
-            y: 30,
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
             duration: 1,
             delay: index * 0.15,
             ease: "power2.out"
@@ -90,7 +84,6 @@ export default function StatsSection() {
       })
     }
 
-<<<<<<< HEAD
     // Besserer ScrollTrigger - fire and forget, aber garantiert im Viewport
     const st = ScrollTrigger.create({
       trigger: container,
@@ -106,50 +99,6 @@ export default function StatsSection() {
       st.kill()
       gsap.killTweensOf('.stat-number')
       gsap.killTweensOf('.stat-item')
-=======
-    const st = ScrollTrigger.create({
-      trigger: container,
-      start: "top 70%",
-      end: "bottom 30%",
-      markers: false,
-      onEnter: () => {
-        animateNumbers()
-      },
-      onLeaveBack: () => {
-        // Optional: Animation zurücksetzen, wenn man wieder hochscrollt
-        // hasAnimatedRef.current = false;
-        // // Hier könnte man die Zahlen auf den Startwert zurücksetzen, falls gewünscht
-      },
-      once: false
-    })
-
-    // Der IntersectionObserver ist redundant, da ScrollTrigger die Logik bereits abdeckt.
-    // Ich lasse ihn hier auskommentiert, um den Code zu bereinigen.
-    /*
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            if (!hasAnimatedRef.current) {
-              animateNumbers()
-            }
-          }
-        })
-      },
-      { threshold: [0.5, 0.7, 0.9], rootMargin: '0px' }
-    )
-    if (container) { observer.observe(container) }
-    */
-
-    // Der Intervall-Check ist ebenfalls redundant zu ScrollTrigger.
-    // clearInterval(intervalId)
-
-    return () => {
-      st.kill()
-      // observer.disconnect()
-      // clearInterval(intervalId)
-      gsap.killTweensOf('.stat-number')
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
     }
   }, [])
 

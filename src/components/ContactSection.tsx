@@ -31,8 +31,6 @@ export default function ContactSection() {
         }
       })
 
-<<<<<<< HEAD
-=======
       // Animate social links
       gsap.from('.social-link', {
         scale: 0,
@@ -41,12 +39,11 @@ export default function ContactSection() {
         duration: 0.6,
         ease: 'back.out(1.7)',
         scrollTrigger: {
-          trigger: '.social-links',
+          trigger: '.social-links-grid',
           start: 'top 85%'
         }
       })
 
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
       // Parallax effect for cards on mouse move
       const handleMouseMove = (e: MouseEvent) => {
         const cards = document.querySelectorAll('.contact-card')
@@ -122,52 +119,6 @@ export default function ContactSection() {
     }
   ]
 
-<<<<<<< HEAD
-=======
-  const socialLinks = [
-    {
-      name: 'Spotify',
-      url: 'https://open.spotify.com/artist/DEIN_ARTIST_ID',
-      icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"/>
-        </svg>
-      ),
-      color: '#1DB954'
-    },
-    {
-      name: 'Instagram',
-      url: 'https://www.instagram.com/DEIN_INSTAGRAM_NAME',
-      icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-        </svg>
-      ),
-      color: '#E4405F'
-    },
-    {
-      name: 'SoundCloud',
-      url: 'https://soundcloud.com/DEIN_SOUNDCLOUD_NAME',
-      icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M7 17.939h-1v-8.068c.308-.231.639-.429 1-.566v8.634zm3 0h1v-9.224c-.229.265-.443.548-.621.857l-.379-.184v8.551zm2 0h1v-8.448c-.277.055-.557.144-.828.251l-.172-.103v8.3zm1 0h1v-7.774c-.172.5-.34 1.018-.49 1.53l-.51-.045v6.289zm2 0h1v-5.154c-.038-.404-.086-.799-.151-1.185l-.849-.07v6.409zm2 0h1v-2.146c-.084-.523-.151-1.035-.207-1.538l-.793-.083v3.767zm2 0h1v-1.279c-.034-.229-.063-.459-.088-.687l-.912-.096v2.062zm3 0h1v-.916c-.022-.119-.042-.238-.063-.357l-.937-.099v1.372zm2 0h1v-.73c-.016-.103-.032-.207-.047-.312l-.953-.1v1.142zm2 0h1v-.571c-.014-.093-.027-.187-.04-.281l-.96-.101v.953zm1 0h1v-.502c-.017-.104-.033-.209-.05-.313l-.95-.1v.915z"/>
-        </svg>
-      ),
-      color: '#FF8800'
-    },
-    {
-      name: 'YouTube',
-      url: 'https://www.youtube.com/user/DEIN_YOUTUBE_KANAL',
-      icon: (
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-        </svg>
-      ),
-      color: '#FF0000'
-    }
-  ]
-
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
   return (
     <section 
       ref={sectionRef} 
@@ -212,7 +163,6 @@ export default function ContactSection() {
           ))}
         </div>
 
-<<<<<<< HEAD
         {/* Social Media Links */}
         <div className="social-media-section">
           <h3 className="social-title">Follow the Journey</h3>
@@ -255,54 +205,33 @@ export default function ContactSection() {
                 </svg>
               </div>
             </a>
-=======
-        {/* Social Links Section */}
-        <div className="social-links">
-          <div className="social-grid">
-            {socialLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-link"
-                style={{ '--social-color': link.color } as React.CSSProperties}
-                aria-label={link.name}
-              >
-                <span className="social-icon">{link.icon}</span>
-                <span className="social-glow" />
-              </a>
-            ))}
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
           </div>
         </div>
 
         {/* Call to Action */}
         <div className="contact-cta">
           <p className="cta-text">Ready for an unforgettable night?</p>
-          
         </div>
       </div>
 
       <style jsx>{`
         .contact-cards-grid {
-          display: flex; /* Flexbox für Zentrierung */
-          justify-content: center; /* Zentriert die Karten horizontal */
-          align-items: flex-start; /* Hält die obere Kante der Karten auf gleicher Höhe */
-          flex-wrap: wrap; /* Ermöglicht den Karten, in die nächste Zeile zu springen */
-          gap: 2rem; /* Abstand zwischen den Karten */
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          flex-wrap: wrap;
+          gap: 2rem;
           margin-bottom: 5rem;
           perspective: 1000px;
-          max-width: 1000px; /* Begrenzt die Gesamtbreite der Kartengruppe */
-          margin-left: auto; /* Zentriert den gesamten Grid-Container */
-          margin-right: auto; /* Zentriert den gesamten Grid-Container */
+          max-width: 1000px;
+          margin-left: auto;
+          margin-right: auto;
         }
         
         .contact-card {
-          flex-basis: 300px; /* Bevorzugte Breite jeder Karte */
-          flex-grow: 1; /* Erlaubt Karten, bei verfügbarem Platz zu wachsen */
-          max-width: 350px; /* Maximale Breite für einzelne Karten */
-          
+          flex-basis: 300px;
+          flex-grow: 1;
+          max-width: 350px;
           transform-style: preserve-3d;
           transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -401,21 +330,14 @@ export default function ContactSection() {
           opacity: 0.5;
         }
 
-<<<<<<< HEAD
         .social-media-section {
           text-align: center;
           margin: 2rem 0 4rem 0;
           padding: 1rem 0;
-=======
-        .social-links {
-          text-align: center;
-          margin-bottom: 4rem;
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         }
 
         .social-title {
           font-family: 'Orbitron', sans-serif;
-<<<<<<< HEAD
           font-size: 1.3rem;
           font-weight: 600;
           color: rgba(255, 255, 255, 0.9);
@@ -473,55 +395,10 @@ export default function ContactSection() {
         .social-icon {
           width: 28px;
           height: 28px;
-=======
-          font-size: 1.8rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.15em;
-          margin-bottom: 2rem;
-          background: linear-gradient(90deg, #40e0d0, #ff4757);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        .social-grid {
-          display: flex;
-          gap: 2rem;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-
-        .social-link {
-          position: relative;
-          width: 70px;
-          height: 70px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.05);
-          border: 2px solid rgba(255, 255, 255, 0.1);
-          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          overflow: hidden;
-        }
-
-        .social-link:hover {
-          transform: translateY(-8px) scale(1.1);
-          background: var(--social-color);
-          border-color: var(--social-color);
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-        }
-
-        .social-icon {
-          position: relative;
-          z-index: 2;
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
           transition: transform 0.4s ease;
         }
 
         .social-link:hover .social-icon {
-<<<<<<< HEAD
           transform: scale(1.2) rotate(5deg);
         }
 
@@ -540,41 +417,11 @@ export default function ContactSection() {
 
         .social-link.instagram .social-icon {
           color: #e4405f;
-=======
-          transform: scale(1.2) rotate(360deg);
-        }
-
-        .social-icon svg {
-          width: 30px;
-          height: 30px;
-          fill: white;
-        }
-
-        .social-glow {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 100%;
-          height: 100%;
-          background: var(--social-color);
-          filter: blur(30px);
-          transform: translate(-50%, -50%);
-          opacity: 0;
-          transition: opacity 0.4s ease;
-        }
-
-        .social-link:hover .social-glow {
-          opacity: 0.6;
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         }
 
         .contact-cta {
           text-align: center;
-<<<<<<< HEAD
           margin-top: 2rem;
-=======
-          margin-top: 4rem;
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
         }
 
         .cta-text {
@@ -586,35 +433,10 @@ export default function ContactSection() {
           letter-spacing: 0.2em;
         }
 
-        .cta-title {
-          font-family: 'Orbitron', sans-serif;
-          font-size: clamp(2rem, 4vw, 3rem);
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          line-height: 1.2;
-          background: linear-gradient(45deg, #ff4757, #40e0d0, #ff4757);
-          background-size: 200% 100%;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          animation: gradientShift 3s ease-in-out infinite;
-        }
-
-        @keyframes gradientShift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-
         @media (max-width: 768px) {
-<<<<<<< HEAD
           .social-links-grid {
             gap: 1.2rem;
             max-width: 300px;
-=======
-          .social-grid {
-            gap: 1rem;
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
           }
 
           .social-link {
@@ -622,7 +444,6 @@ export default function ContactSection() {
             height: 55px;
           }
 
-<<<<<<< HEAD
           .social-icon {
             width: 24px;
             height: 24px;
@@ -632,12 +453,6 @@ export default function ContactSection() {
             font-size: 1.1rem;
             margin-bottom: 1rem;
           }
-=======
-          .social-icon svg {
-            width: 24px;
-            height: 24px;
-          }
->>>>>>> 283e2a89e6e0729170b28fa60c074a015b83bf7d
           
           .card-icon {
             width: 50px;
@@ -658,17 +473,14 @@ export default function ContactSection() {
           }
         }
 
-        /* Alte, redundante Grid-Media-Queries entfernen */
         @media (max-width: 968px) {
           .contact-cards-grid {
-            /* flex-basis: calc(50% - 0.75rem); bleibt in .contact-card */
             gap: 1.5rem;
           }
         }
         
         @media (max-width: 640px) {
           .contact-cards-grid {
-            /* flex-basis: 100%; bleibt in .contact-card */
             gap: 1.5rem;
             max-width: 400px;
           }
